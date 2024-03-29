@@ -1,0 +1,182 @@
+/*.ysabeau-office-<uniquifier>*/
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Ysabeau Office", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    overflow-x: hidden;
+}
+
+header {
+    height: 65px;
+}
+
+.about-me .parent-box-left,
+.resume .parent-box {
+    background-color: #e6dace;
+}
+
+.about-me .parent-box-left,
+.about-me .parent-box-right {
+    height: 1150px;
+}
+
+.about-me .child-box-left {
+    background-color: #f4ece6;
+    box-shadow: -2px 3px 3px rgba(94, 94, 94, 0.4);
+}
+
+.about-me .profile-image {
+    height: 200px;
+    width: 200px;
+}
+
+.about-me .profile-name .profile-f-name {
+    height: 40px;
+}
+
+.about-me .profile-line {
+    height: 2px;
+}
+
+.about-me .profile-hello {
+    font-size: 70px;
+}
+
+.about-me .profile-butons a {
+    width: 120px;
+    font-size: medium;
+}
+
+.about-me .profile-butons a:hover {
+    width: 125px;
+    color: #fff;
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+
+
+/* X-Small devices (portrait phones, less than 576px) */
+/* No media query for `xs` since this is the default in Bootstrap */
+
+/* Small devices (landscape phones, 576px and up)*/
+@media (min-width: 576px) {
+
+    .about-me .parent-box-left,
+    .about-me .parent-box-right {
+        height: 1200px;
+    }
+
+    .about-me .profile-butons a {
+        width: 125px;
+        font-size: large;
+    }
+
+    .about-me .profile-image {
+        height: 250px;
+        width: 250px;
+    }
+
+    .about-me .profile-hello {
+        font-size: 90px;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+
+    .about-me .parent-box-left,
+    .about-me .parent-box-right {
+        height: 700px;
+    }
+
+    .about-me .profile-butons a {
+        width: 110px;
+        font-size: small;
+    }
+
+    .about-me .profile-image {
+        height: 160px;
+        width: 160px;
+    }
+
+    .about-me .profile-hello {
+        font-size: 70px;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+
+    .about-me .parent-box-left,
+    .about-me .parent-box-right {
+        height: 700px;
+    }
+
+    .about-me .profile-butons a {
+        width: 95px;
+        font-size: small;
+    }
+
+    .about-me .profile-image {
+        height: 150px;
+        width: 150px;
+    }
+
+    .about-me .profile-hello {
+        font-size: 80px;
+    }
+}
+
+/* X-Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+
+    .about-me .parent-box-left,
+    .about-me .parent-box-right {
+        height: 750px;
+    }
+
+    .about-me .profile-butons a {
+        width: 100px;
+        font-size: small;
+    }
+
+    .about-me .profile-image {
+        height: 200px;
+        width: 200px;
+    }
+
+    .about-me .profile-hello {
+        font-size: 90px;
+    }
+}
+
+/* XX-Large devices (larger desktops, 1400px and up) */
+@media (min-width: 1400px) {
+
+    .about-me .parent-box-left,
+    .about-me .parent-box-right {
+        height: 800px;
+    }
+
+    .about-me .profile-butons a {
+        width: 125px;
+        font-size: medium;
+    }
+
+    .about-me .profile-image {
+        height: 250px;
+        width: 250px;
+    }
+
+    .about-me .profile-hello {
+        font-size: 100px;
+    }
+}
