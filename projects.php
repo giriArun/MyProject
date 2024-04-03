@@ -65,85 +65,90 @@
         </nav>
     </header>
 
-    <section class="about-me">
+    <section class="projects">
         <div class="container-fluid">
-            <div class="row position-relative">
-                <div class="col-5 col-sm-5 col-md-5 col-lg-5 parent-box-left"></div>
-                <div class="col-7 col-sm-7 col-md-7 col-lg-7 parent-box-right"></div>
-                <div class="position-absolute top-0 start-0 col-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="row my-5">
-                        <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-2"></div>
-                        <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-8">
+            <div class="row parent-box py-5">
+                <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-2"></div>
+                <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-8">
+                    <div class="row">
+                        <div class="col-0 col-sm-0 col-md-0 col-lg-1"></div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-10">
+                            <div class="row my-5 pb-4 pt-0">
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 text-center fs-2 fw-bold">
+                                    <i class="bi bi-square-fill text-primary fs-4"></i>
+                                    Projects
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-0 col-sm-0 col-md-1 col-lg-1"></div>
+                                <div class="col-12 col-sm-12 col-md-10 col-lg-10 text-start fs-6">
+                                    I'm a paragraph. Click here to add your own text and edit me. It’s easy. Just click
+                                    “Edit Text” or double click me to add your own content and make changes to the font.
+                                    I’m a great place for you to tell a story and let your users know a little more
+                                    about you.
+                                </div>
+                                <div class="col-0 col-sm-0 col-md-1 col-lg-1"></div>
+                            </div>
                             <div class="row">
-                                <div class="col-0 col-sm-0 col-md-0 col-lg-1"></div>
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-10">
-                                    <div class="row my-5">
-                                        <div class="col-12 col-sm-12 col-md-6 col-lg-6 text-center child-box-left">
-                                            <div class="mx-md-2 mx-sm-5 mx-lg-5 my-5">
-                                                <div>
-                                                    <img class="rounded-circle profile-image"
-                                                        src="asset/images/images.jpeg" alt="">
-                                                </div>
-                                                <div class="text-capitalize fw-bolder fs-1 my-3 profile-name">
-                                                    <div class="profile-f-name">Arun</div>
-                                                    <div class="">Giri</div>
-                                                </div>
-                                                <div class="w-25 m-auto bg-primary rounded-pill profile-line"></div>
-                                                <div class="my-4 text-uppercase">Software Developer</div>
+                                <div class="col-12 bg-white mt-4 mb-5 shadow">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-12 col-md-7 col-lg-7 py-5 px-5 position-relative">
+                                            <div class="bg-primary position-absolute top-0 start-0 my-5 pt-5 pb-4 px-2">
                                             </div>
-                                            <div class="row bg-white text-center py-3">
-                                                <div class="col-1 col-sm-1 col-md-1 col-lg-1"></div>
-                                                <div class="col-10 col-sm-10 col-md-10 col-lg-10">
-                                                    <div class="row">
-                                                        <div class="col-2 col-sm-2 col-md-2 col-lg-2">
-                                                            <a href="#"><i class="bi bi-whatsapp"></i></a>
-                                                        </div>
-                                                        <div class="col-2 col-sm-2 col-md-2 col-lg-2">
-                                                            <a href="#"><i class="bi bi-whatsapp"></i></a>
-                                                        </div>
-                                                        <div class="col-2 col-sm-2 col-md-2 col-lg-2">
-                                                            <a href="#"><i class="bi bi-whatsapp"></i></a>
-                                                        </div>
-                                                        <div class="col-2 col-sm-2 col-md-2 col-lg-2">
-                                                            <a href="#"><i class="bi bi-whatsapp"></i></a>
-                                                        </div>
-                                                        <div class="col-2 col-sm-2 col-md-2 col-lg-2">
-                                                            <a href="#"><i class="bi bi-whatsapp"></i></a>
-                                                        </div>
-                                                        <div class="col-2 col-sm-2 col-md-2 col-lg-2">
-                                                            <a href="#"><i class="bi bi-whatsapp"></i></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-1 col-sm-1 col-md-1 col-lg-1"></div>
+                                            <div class="text-primary fw-bold fs-4">
+                                                Project name 01
+                                                <a href="#"><i class="bi bi-link-45deg"></i></a>
+                                            </div>
+                                            <div class="fs-5">Role Title</div>
+                                            <div class="fs-6 mt-3">
+                                                I'm a paragraph. Click here to add your own text and
+                                                edit me. It’s easy. Just click “Edit Text” or double click me to add
+                                                your own content and make changes to the font. I’m a great place for you
+                                                to tell a story and let your users know a little more about you.
+                                                I'm a paragraph. Click here to add your own text and edit me. It’s easy.
+                                                Just click “Edit Text” or double click me to add your own content and
+                                                make changes to the font. I’m a great place for you to tell a story and
+                                                let your users know a little more about you.
                                             </div>
                                         </div>
-                                        <div class="col-12 col-sm-12 col-md-6 col-lg-6 bg-white">
-                                            <div class="mx-md-2 mx-sm-5 mx-lg-5 my-5">
-                                                <h2 class="fw-bolder profile-hello">Hello</h2>
-                                                <p class="fw-bold fs-5">Here's who I am & what I do</p>
-                                                <div class="text-uppercase profile-butons mb-3">
-                                                    <a class="btn btn-outline-dark fw-bold rounded-pill my-1" href="#"
-                                                        role="button">RESUME</a>
-                                                    <a class="btn btn-outline-dark fw-bold rounded-pill my-1" href="#"
-                                                        role="button">PROJECTS</a>
-                                                </div>
-                                                <p class="fs-6">I'm a paragraph. Click here to add your own
-                                                    text and
-                                                    edit me. It's
-                                                    easy. Just click “Edit Text” or double click me to add your own
-                                                    content and make changes to the font.</p>
-                                            </div>
-
+                                        <div class="col-12 col-sm-12 col-md-5 col-lg-5 px-0">
+                                            <img src="asset/images/testImage.jpg"
+                                                class="img-fluid height-webkit-fill-available">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-0 col-sm-0 col-md-0 col-lg-1"></div>
+                                <div class="col-12 bg-white mt-4 mb-5 shadow">
+                                    <div class="row">
+                                        <div class="col-12 col-sm-12 col-md-7 col-lg-7 py-5 px-5 position-relative">
+                                            <div class="bg-primary position-absolute top-0 start-0 my-5 pt-5 pb-4 px-2">
+                                            </div>
+                                            <div class="text-primary fw-bold fs-4">Project name 01<a href="#"><i
+                                                        class="bi bi-link-45deg"></i></a></div>
+                                            <div class="fs-5">Role Title</div>
+                                            <div class="fs-6 mt-3">
+                                                I'm a paragraph. Click here to add your own text and
+                                                edit me. It’s easy. Just click “Edit Text” or double click me to add
+                                                your own content and make changes to the font. I’m a great place for you
+                                                to tell a story and let your users know a little more about you.
+                                                I'm a paragraph. Click here to add your own text and edit me. It’s easy.
+                                                Just click “Edit Text” or double click me to add your own content and
+                                                make changes to the font. I’m a great place for you to tell a story and
+                                                let your users know a little more about you.
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-5 col-lg-5 px-0">
+                                            <img src="asset/images/testImage.jpg"
+                                                class="img-fluid height-webkit-fill-available">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-2"></div>
+                        <div class="col-0 col-sm-0 col-md-0 col-lg-1"></div>
                     </div>
                 </div>
+                <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-2"></div>
+
             </div>
         </div>
     </section>
