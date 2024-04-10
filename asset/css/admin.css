@@ -1,0 +1,26 @@
+/*.ysabeau-office-<uniquifier>*/
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Ysabeau Office", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
+    overflow-x: hidden;
+}
+
+.background-color-bone {
+    background-color: #e6dace;
+}
+
+.invalid-js-message {
+    display: none;
+    width: 100%;
+    margin-top: .25rem;
+    font-size: .875em;
+    color: #dc3545;
+}
