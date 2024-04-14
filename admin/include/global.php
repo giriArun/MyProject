@@ -1,15 +1,52 @@
 <?php
+    //Session start
+    if(session_id( ) == '' || !isset( $_SESSION ) || session_status( ) === PHP_SESSION_NONE) {
+        // session isn't started
+        session_start();
+    }
+
     // Get File path & name
     $filePath = $_SERVER[ 'PHP_SELF' ];
     $fileNameArray = explode( "/", $filePath );
     $fileName = end( $fileNameArray );
 
+    include '../model/dbConnection.php';
+    require_once '../model/usersService.php';
+
+    $usersService = new usersService( );
+    //session_unset();
+    if( isset( $_SESSION[ 'userId' ] ) && $_SESSION[ 'userId' ] > 0 ){
+        if( strtolower( $fileName ) == 'signup.php' || strtolower( $fileName ) == 'login.php' ){
+            header( "Location: index.php" );
+        }
+
+        if( !isset( $_SESSION[ 'userFirstName' ] ) || strlen( trim( $_SESSION[ 'userFirstName' ] ) ) == 0 ){
+            $userData = $usersService->getUserByUserId( $userid = $_SESSION[ 'userId' ] );
+    
+            if( $userData[ "status" ] ){
+                $_SESSION[ 'userFirstName' ] = $userData[ "userFirstName" ];
+                $_SESSION[ 'userLastName' ] = $userData[ "userLastName" ];
+            } else {
+                // remove all session variables
+                session_unset();
+                header( "Location: login.php" );
+            }
+        }
+    } else {
+        // remove all session variables
+        session_unset();
+
+        if( strtolower( $fileName ) != 'signup.php' && strtolower( $fileName ) != 'login.php' ){
+            header( "Location: login.php" );
+        }
+    }
+
     switch ( strtolower( $fileName ) ) {
         case 'signup.php':
             $pageTitle = 'SignUp';
             break;
-        case 'label2':
-            $pageTitle = 'SignUp';
+        case 'login.php':
+            $pageTitle = 'LogIn';
             break;
         case 'label3':
             $pageTitle = 'SignUp';

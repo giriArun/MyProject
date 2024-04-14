@@ -75,8 +75,16 @@ function validateIisEmail(email) {
     return regex.test(email);
 }
 
+//logout
+function logout() {
+    var formData = [{ name: 'actionType', value: 'logOutSubmit' }];
+    //formData.push({ name: 'actionType', value: 'logOutSubmit' });
+
+    ajaxCall(formData = formData, redirectUrl = "login.php");
+}
+
 //ajax call
-function ajaxCall(formData) {
+function ajaxCall(formData, redirectUrl) {
     var returnData = [];
 
     $.ajax({
@@ -85,7 +93,33 @@ function ajaxCall(formData) {
         url: "../model/ajaxService.php",
         data: formData,
         success: function (data) {
-            returnData = JSON.parse(data);
+            data = JSON.parse(data);
+
+            if ("status" in data) {
+                var html = '';
+
+                if (data.status) {
+                    if ("message" in data) {
+                        data.message.forEach((x, i) => html += '<div class="text-success">' + x + '</div>');
+                    }
+
+                    if ("newPassword" in data && data.newPassword) {
+                        setTimeout(function () {
+                            window.location.href = data.redirectUrl;
+                        }, 1000);
+                    } else {
+                        setTimeout(function () {
+                            window.location.href = redirectUrl;
+                        }, 1000);
+                    }
+                } else {
+                    if ("message" in data) {
+                        data.message.forEach((x, i) => html += '<div class="text-danger">' + x + '</div>');
+                    }
+                }
+
+                $('#ajaxPopupModal').modal('show').find('div.modal-body').html(html);
+            }
         }
     });
 
@@ -142,36 +176,58 @@ $(function () {
                 $('div.valid-feedback, div.invalid-feedback', '.' + this.password.id).addClass('d-none');
                 $('div.invalid-js-message', '.' + this.password.id).css('display', 'block').html('Please enter a Password between 8 to 16 characters.');
             } else {
-                var data = ajaxCall(formData);
-
-                if ("status" in data) {
-                    var html = '';
-
-                    if (data.status) {
-                        if ("message" in data) {
-                            data.message.forEach((x, i) => html += '<div class="text-success">' + x + '</div>');
-                        }
-                        setTimeout(function () {
-                            window.location.href = "login.php";
-                        }, 1000);
-                    } else {
-                        if ("message" in data) {
-                            data.message.forEach((x, i) => html += '<div class="text-danger">' + x + '</div>');
-                        }
-                    }
-
-                    $('#ajaxPopupModal').modal('show').find('div.modal-body').html(html);
-                }
+                ajaxCall(formData = formData, redirectUrl = "login.php");
             }
         });
 
         $('.signup .form-control').on("keyup", function (e) {
-            console.log('0');
             if ($('div.valid-feedback, div.invalid-feedback', '.' + this.id).hasClass('d-none')) {
                 $('div.valid-feedback, div.invalid-feedback', '.' + this.id).removeClass('d-none');
                 $('div.invalid-js-message', '.' + this.id).css('display', 'none');
             }
         });
+
+    } else if (document.body.classList.contains('login')) {
+
+        $("form[ name = 'form_login' ]").submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serializeArray();
+            formData.push({ name: 'actionType', value: 'logInSubmit' });
+
+            if (!validateIisEmail(this.emailPhone.value) && !validateNumber(this.emailPhone.value)) {
+                this.emailPhone.focus();
+                $('div.valid-feedback, div.invalid-feedback', '.' + this.emailPhone.id).addClass('d-none');
+                $('div.invalid-js-message', '.' + this.emailPhone.id).css('display', 'block').html('Please enter a valid Email or Phone number.');
+            } else if (!validatePassword(this.password.value)) {
+                this.password.focus();
+                $('div.valid-feedback, div.invalid-feedback', '.' + this.password.id).addClass('d-none');
+                $('div.invalid-js-message', '.' + this.password.id).css('display', 'block').html('Please enter a valid Password.');
+            } else if (!validateStringLength(this.password.value, 16, 8)) {
+                this.password.focus();
+                $('div.valid-feedback, div.invalid-feedback', '.' + this.password.id).addClass('d-none');
+                $('div.invalid-js-message', '.' + this.password.id).css('display', 'block').html('Please enter a Password between 8 to 16 characters.');
+            } else {
+                if (validateIisEmail(this.emailPhone.value) && !validateStringLength(this.emailPhone.value, 50)) {
+                    this.emailPhone.focus();
+                    $('div.valid-feedback, div.invalid-feedback', '.' + this.emailPhone.id).addClass('d-none');
+                    $('div.invalid-js-message', '.' + this.emailPhone.id).css('display', 'block').html('Please enter a Email within 50 characters.');
+                } else if (validateNumber(this.emailPhone.value) && !validateStringLength(this.emailPhone.value, 10, 10)) {
+                    this.emailPhone.focus();
+                    $('div.valid-feedback, div.invalid-feedback', '.' + this.emailPhone.id).addClass('d-none');
+                    $('div.invalid-js-message', '.' + this.emailPhone.id).css('display', 'block').html('Please enter a Phone within 10 number.');
+                } else {
+                    ajaxCall(formData = formData, redirectUrl = "index.php");
+                }
+            }
+        });
+
+        $('.login .form-control').on("keyup", function (e) {
+            if ($('div.valid-feedback, div.invalid-feedback', '.' + this.id).hasClass('d-none')) {
+                $('div.valid-feedback, div.invalid-feedback', '.' + this.id).removeClass('d-none');
+                $('div.invalid-js-message', '.' + this.id).css('display', 'none');
+            }
+        });
+
     }
 });
 

@@ -1,11 +1,16 @@
 <?php
     include 'dbConnection.php';
+    require_once 'validateService.php';
     require_once 'usersService.php';
     require_once 'passwordService.php';
     //usersService.php
 
+    // Start the session
+    session_start();
+
     $usersService = new usersService( );
     $passwordService = new passwordService( );
+    $validateService = new validateService( );
 
     function validateName($name){
         $name = trim($name);
@@ -55,7 +60,7 @@
         }
     }
 
-    function signUpSubmit( $postData){
+    function signUpSubmit( $postData ){
         $firstName = $postData['firstName'];
         $lastName = $postData['lastName'];
         $email = $postData['email'];
@@ -136,23 +141,78 @@
         }       
     }
 
+    function logInSubmit( $postData ){
+        $emailPhone = $postData['emailPhone'];
+        $password = $postData[ 'password' ];
+
+        $message = [];
+        global $validateService;
+        global $usersService;
+        global $passwordService;
+
+        if( !$validateService->validateIisEmail( $emailPhone ) && !$validateService->validateNumber( $emailPhone ) ){
+            array_push($message,"Please enter a valid Email or Phone number.");
+        }
+
+        if(!$validateService->validatePassword($password)){
+            array_push($message,"Please enter a valid Password.");
+        }
+
+        if(!$validateService->validateStringLength( $string = $password, $maxLength = 16, $minLength = 8)){
+            array_push($message,"Please enter a Password between 8 to 16 characters.");
+        }
+        if(count($message)){
+            return array("status" => false, "message" => $message, "data" => '');
+        } else{
+            if( $validateService->validateIisEmail( $emailPhone ) && !$validateService->validateStringLength( $string = $emailPhone, $maxLength = 50, $minLength = 1) ){
+                array_push($message,"Please enter a Email within 50 characters.");
+                return array( "status" => false, "message" => $message, "data" => '' );
+            } else {
+                $userId = $usersService->getUserIdByEmailOrPhone( $emailPhone = $emailPhone );
+
+                if( $userId > 0 ){
+                    $passwordData = $passwordService->checkByPasswordUserId(
+                        $passwordHash = hash( 'sha256', $password ),
+                        $userId = $userId
+                    );
+
+                    if( $passwordData[ "status" ] && !$passwordData[ "newPassword" ]){
+                        $_SESSION[ "userId" ] = $userId;
+                    }
+
+                    return $passwordData;
+                } else {
+                    return array( "status" => false, "message" => array( "User authentication failed." ), "data" => '' );
+                }
+            }
+        }
+    }
+
+    function logOutSubmit( ){
+        // remove all session variables
+        session_unset();
+
+        // destroy the session
+        session_destroy();
+
+        return array( "status" => true, "message" => array( "You have successfully logged out!" ), "data" => '' );
+    }
+
 
     if (array_key_exists("actionType",$_POST)){
         switch ($_POST['actionType']) {
             case "signUpSubmit":
                 print json_encode( signUpSubmit( $_POST ) );
                 break;
-            case "label2":
-                //code block;
+            case "logInSubmit":
+                print json_encode( logInSubmit( $_POST ) );
                 break;
-            case "label3":
-                //code block
+            case "logOutSubmit":
+                print json_encode( logOutSubmit( ) );
                 break;
             default:
-              //code block
+                print json_encode([]);
           }
-        //print($_POST['actionType']);
-        //print json_encode($_POST);
     } else{
         print json_encode([]);
     }

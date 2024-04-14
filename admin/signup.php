@@ -63,6 +63,9 @@
                                 <div class="col-12 text-center">
                                     <button class="btn btn-primary" type="submit">SignUp</button>
                                 </div>
+                                <div class="col-12 text-center">
+                                    <p>If you have already signed up, please click on the <a href="login.php" class="text-decoration-none">'Login'</a> button.</p>
+                                </div>
                             </form>
                         </div>
                         <div class="col-1 col-sm-2 col-md-3 col-lg-3"></div>

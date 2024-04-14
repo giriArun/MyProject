@@ -3,8 +3,8 @@
         <div class="container-fluid">
             <a class="navbar-brand fs-3" href="#">
                 <i class="bi bi-square-fill text-primary fs-4"></i>
-                <span class="fw-bold">Arun Giri</span>
-                <span class="d-none d-sm-inline-block"> / Software Developer</span>
+                <span class="fw-bold"><?=ucwords( $_SESSION[ 'userFirstName' ] . ' ' . $_SESSION[ 'userLastName' ] );?></span>
+                <span class="d-none d-sm-inline-block"></span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,7 @@
                         </ul>
                     </li>
                     <li class="nav-item text-uppercase">
-                        <a class="nav-link" href="#">Log out</a>
+                        <a class="nav-link" href="javascript:logout()">Log out</a>
                     </li>
                 </ul>
             </div>
