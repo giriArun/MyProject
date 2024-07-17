@@ -12,6 +12,7 @@
 
     include '../model/dbConnection.php';
     require_once '../model/usersService.php';
+    require_once '../model/addressService.php';
 
     $usersService = new usersService( );
     //session_unset();
@@ -21,7 +22,7 @@
         }
 
         if( !isset( $_SESSION[ 'userFirstName' ] ) || strlen( trim( $_SESSION[ 'userFirstName' ] ) ) == 0 ){
-            $userData = $usersService->getUserByUserId( $userid = $_SESSION[ 'userId' ] );
+            $userData = $usersService->getUserByUserId( $userId = $_SESSION[ 'userId' ] );
     
             if( $userData[ "status" ] ){
                 $_SESSION[ 'userFirstName' ] = $userData[ "userFirstName" ];
@@ -47,6 +48,19 @@
             break;
         case 'login.php':
             $pageTitle = 'LogIn';
+            break;
+        case 'index.php':
+            $pageTitle = 'Index';
+            break;
+        case 'profile.php':
+            $addressService = new addressService( );
+
+            $pageTitle = 'Profile';
+            $userData = $usersService->getUserByUserId( $userId = $_SESSION[ 'userId' ] );
+            $addressData = $addressService->getAddressById( $userId = $_SESSION[ 'userId' ] );
+            break;
+        case 'label3':
+            $pageTitle = 'SignUp';
             break;
         case 'label3':
             $pageTitle = 'SignUp';

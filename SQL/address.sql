@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: May 01, 2024 at 10:31 AM
+-- Generation Time: Apr 23, 2024 at 06:36 PM
 -- Server version: 5.7.36
 -- PHP Version: 7.4.26
 
@@ -24,27 +24,29 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Table structure for table `address`
 --
 
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
-  `users_id` int(11) NOT NULL AUTO_INCREMENT,
-  `users_first_name` varchar(20) DEFAULT NULL,
-  `users_last_name` varchar(20) DEFAULT NULL,
-  `users_email` varchar(50) DEFAULT NULL,
-  `users_phone` varchar(10) DEFAULT NULL,
-  `users_terms` bit(2) NOT NULL DEFAULT b'0',
-  `users_photo` varchar(100) DEFAULT NULL,
-  `isAdmin` bigint(2) NOT NULL DEFAULT '0',
-  `isActive` bit(1) NOT NULL DEFAULT b'1',
+DROP TABLE IF EXISTS `address`;
+CREATE TABLE IF NOT EXISTS `address` (
+  `address_id` int(11) NOT NULL AUTO_INCREMENT,
+  `users_id_fk` int(11) NOT NULL,
+  `address` varchar(100) DEFAULT NULL,
+  `police_station` varchar(50) DEFAULT NULL,
+  `city_town` varchar(50) DEFAULT NULL,
+  `district` varchar(50) DEFAULT NULL,
+  `pin` int(7) DEFAULT NULL,
+  `state` varchar(50) DEFAULT NULL,
+  `country` varchar(30) DEFAULT NULL,
+  `map_url` varchar(1000) DEFAULT NULL,
+  `map_image` varchar(100) DEFAULT NULL,
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` int(11) DEFAULT NULL,
   `modified_on` timestamp NULL DEFAULT NULL,
   `modified_by` int(11) DEFAULT NULL,
-  PRIMARY KEY (`users_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
-
+  PRIMARY KEY (`address_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

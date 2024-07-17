@@ -75,16 +75,110 @@ function validateIisEmail(email) {
     return regex.test(email);
 }
 
+function validateAddress(name) {
+    const pattern = new RegExp('^[0-9a-zA-Z ,.:_\-]+$');
+    name = name.trim();
+
+    if (name.length > 0 && pattern.test(name)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function validatePlace(name) {
+    const pattern = new RegExp('^[0-9a-zA-Z ._\-]+$');
+    name = name.trim();
+
+    if (name.length > 0 && pattern.test(name)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function validateUrl(name) {
+    const pattern = new RegExp('/^(http|https|ftp):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/i');
+    name = name.trim();
+
+    if (name.length > 0 && pattern.test(name)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function validatedForm(
+    data = "",
+    dataType = "",
+    dataName = "",
+    minLength = 1,
+    maxLength = 0
+) {
+    var returnMessage = "";
+
+    if (dataType == 'singleName') {
+        returnMessage = validateSingleName(data) ? "" : "Please enter a valid " + dataName + ".";
+    } else if (dataType == 'email') {
+        returnMessage = validateIisEmail(data) ? "" : "Please enter a valid " + dataName + ".";
+    } else if (dataType == 'phone') {
+        returnMessage = validateNumber(data) ? "" : "Please enter a valid " + dataName + ".";
+    } else if (dataType == 'address') {
+        returnMessage = validateAddress(data) ? "" : "Please enter a valid " + dataName + ".";
+    } else if (dataType == 'place') {
+        returnMessage = validatePlace(data) ? "" : "Please enter a valid " + dataName + ".";
+    } else if (dataType == 'url') {
+        //returnMessage = validateUrl(data) ? "" : "Please enter a valid " + dataName + ".";
+    }
+
+    if (returnMessage == "" && maxLength > 0) {
+        var lengthMessage = "";
+        if (maxLength == minLength) {
+            lengthMessage = "Please enter a " + dataName + " with " + maxLength + " characters.";
+        } else if (maxLength > minLength && minLength > 1) {
+            lengthMessage = "Please enter a " + dataName + " between " + minLength + " and " + maxLength + " characters.";
+        } else {
+            lengthMessage = "Please enter a " + dataName + " within " + maxLength + " characters.";
+        }
+        returnMessage = validateStringLength(data, maxLength, minLength) ? "" : lengthMessage;
+    }
+
+    console.log(data, dataType, dataName, minLength, maxLength, returnMessage);
+    return returnMessage;
+}
+
 //logout
 function logout() {
     var formData = [{ name: 'actionType', value: 'logOutSubmit' }];
-    //formData.push({ name: 'actionType', value: 'logOutSubmit' });
 
     ajaxCall(formData = formData, redirectUrl = "login.php");
 }
 
+//profile
+function editProfile(isEdit) {
+    var elem = document.getElementById('form_profileEdit').elements;
+
+    $(elem).each(function (e) {
+        if (isEdit) {
+            $('.formLabel', '.' + this.id).addClass('d-none');
+            $('.formField', '.' + this.id).removeClass('d-none');
+        } else {
+            $('.formLabel', '.' + this.id).removeClass('d-none');
+            $('.formField', '.' + this.id).addClass('d-none');
+        }
+    });
+
+    if (isEdit) {
+        document.querySelector(".profileEditButton .editButton").classList.add("d-none");
+        document.querySelector(".profileEditButton .viewButton").classList.remove("d-none");
+    } else {
+        document.querySelector(".profileEditButton .editButton").classList.remove("d-none");
+        document.querySelector(".profileEditButton .viewButton").classList.add("d-none");
+    }
+}
+
 //ajax call
-function ajaxCall(formData, redirectUrl) {
+function ajaxCall(formData, redirectUrl = '') {
     var returnData = [];
 
     $.ajax({
@@ -107,10 +201,17 @@ function ajaxCall(formData, redirectUrl) {
                         setTimeout(function () {
                             window.location.href = data.redirectUrl;
                         }, 1000);
-                    } else {
+                    } else if (redirectUrl != '') {
                         setTimeout(function () {
                             window.location.href = redirectUrl;
                         }, 1000);
+                    }
+
+                    if ("data" in data && data.data != '' && !$.isEmptyObject(data.data)) {
+                        $.each(data.data, function (index, value) {
+                            $('.' + index).val(value);
+                        });
+
                     }
                 } else {
                     if ("message" in data) {
@@ -228,6 +329,82 @@ $(function () {
             }
         });
 
+    } else if (document.body.classList.contains('profile')) {
+        $(".profileEditButton .editButton").click(function () {
+            editProfile(true);
+        });
+
+        $(".profileEditButton .viewButton").click(function () {
+            editProfile(false);
+        });
+
+
+        $("form[ name = 'form_profileEdit' ]").submit(function (e) {
+            e.preventDefault();
+            var returnMessage = "";
+            var isAjaxCall = true;
+
+            $(this.elements).each(function (e) {
+                var minLength = $(this).attr('minlength');
+                var maxLength = $(this).attr('maxlength');
+                var dataType = $(this).data('type');
+                var dataName = $(this).data('name');
+                var dataValue = $(this).val();
+
+                if (typeof dataType != 'undefined' && ((dataValue).trim()).length > 0) {
+                    returnMessage = validatedForm(
+                        data = dataValue,
+                        dataType = dataType,
+                        dataName = dataName,
+                        minLength = minLength,
+                        maxLength = maxLength
+                    );
+
+                    if (returnMessage != "") {
+                        isAjaxCall = false;
+                        this.focus();
+                        $('div.valid-feedback, div.invalid-feedback', '.' + this.id).addClass('d-none');
+                        $('div.invalid-js-message', '.' + this.id).css('display', 'block').html(returnMessage);
+                    }
+                }
+
+
+            });
+
+
+
+
+
+            if (isAjaxCall) {
+                var formData = $(this).serializeArray();
+                formData.push({ name: 'actionType', value: 'profileSubmit' });
+
+                ajaxCall(formData = formData, redirectUrl = "");
+            }
+
+        });
+
+        $('.profile .form-control').on("keyup", function (e) {
+            if ($('div.valid-feedback, div.invalid-feedback', '.' + this.id).hasClass('d-none')) {
+                $('div.valid-feedback, div.invalid-feedback', '.' + this.id).removeClass('d-none');
+                $('div.invalid-js-message', '.' + this.id).css('display', 'none');
+            }
+        });
+
+        //validationProfileImage
+        var _URL = window.URL || window.webkitURL;
+        $("#validationProfileImage").change(function (e) {
+            var file, img;
+            if ((file = this.files[0])) {
+                img = new Image();
+                var objectUrl = _URL.createObjectURL(file);
+                img.onload = function () {
+                    alert(this.width + " " + this.height);
+                    _URL.revokeObjectURL(objectUrl);
+                };
+                img.src = objectUrl;
+            }
+        });
     }
 });
 

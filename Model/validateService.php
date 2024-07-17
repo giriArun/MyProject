@@ -1,6 +1,6 @@
 <?php
     class validateService{
-        function validateName($name){
+        public function validateName($name){
             $name = trim($name);
     
             if( strlen($name) > 0 && preg_match('/^[a-zA-Z]+$/', $name) ){
@@ -10,7 +10,7 @@
             }
         }
     
-        function validateStringLength( $string, $maxLength, $minLength = 1){
+        public function validateStringLength( $string, $maxLength, $minLength = 1){
             $string = trim($string);
     
             if (strlen($string) > $maxLength || strlen($string) < $minLength) {
@@ -20,7 +20,7 @@
             }
         }
     
-        function validateIisEmail($email) {
+        public function validateIisEmail($email) {
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 return false;
             } else {
@@ -28,7 +28,7 @@
             }
         }
     
-        function validateNumber($name) {
+        public function validatePhoneNumber($name) {
             $name = trim($name);
     
             if( strlen($name) > 0 && preg_match('/^[0-9]{10}+$/', $name) ){
@@ -38,11 +38,55 @@
             }
         }
     
-        function validatePassword($name){
+        public function validateNumber($name) {
+            $name = trim($name);
+    
+            if( strlen($name) > 0 && preg_match('/^[0-9]+$/', $name) ){
+                return true;
+            } else {
+                return false;
+            }
+        }
+    
+        public function validatePassword($name){
             $name = trim($name);
     
             if( strlen($name) > 0 && preg_match('/^[0-9a-zA-Z!@#$&]+$/', $name) ){
                 return true;
+            } else {
+                return false;
+            }
+        }
+    
+        public function validateAddress($name){
+            $name = trim($name);
+    
+            if( strlen($name) > 0 && preg_match('/^[0-9a-zA-Z,.:\-_ ]+$/', $name) ){
+                return true;
+            } else {
+                return false;
+            }
+        }
+    
+        public function validatePlace($name){
+            $name = trim($name);
+    
+            if( strlen($name) > 0 && preg_match('/^[0-9a-zA-Z._\- ]+$/', $name) ){
+                return true;
+            } else {
+                return false;
+            }
+        }
+    
+        public function validateUrl($name){
+            $name = trim($name);
+    
+            if( strlen($name) > 0 ){
+                if ( filter_var( $name, FILTER_VALIDATE_URL ) ){
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
                 return false;
             }

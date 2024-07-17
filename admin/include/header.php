@@ -13,12 +13,6 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fs-6 text-start">
                     <li class="nav-item text-uppercase">
-                        <a class="nav-link" aria-current="page" href="../admin/signup.php">Sign up</a>
-                    </li>
-                    <li class="nav-item text-uppercase">
-                        <a class="nav-link" aria-current="page" href="#">Login</a>
-                    </li>
-                    <li class="nav-item text-uppercase">
                         <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li>
                     <li class="nav-item dropdown text-uppercase">
@@ -35,11 +29,21 @@
                         </ul>
                     </li>
                     <li class="nav-item dropdown text-uppercase">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <?php
+                            $A_C_Active = in_array( 
+                                strtolower( $pageTitle ), 
+                                array( "profile", "ChangePassword", "Userlist", "Familylist") 
+                            ) ? 'active' : '';
+                        ?>
+                        <a class="nav-link dropdown-toggle <?=$A_C_Active;?>" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Account
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li>
+                                <a class="dropdown-item <?=( strtolower( $pageTitle ) == 'profile' ? 'active' : '' );?>" href="profile.php">
+                                    Profile
+                                </a>
+                            </li>
                             <li><a class="dropdown-item" href="#">Change Password</a></li>
                             <li>
                                 <hr class="dropdown-divider">
