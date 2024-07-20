@@ -1,3 +1,5 @@
+<?php include 'include/global.php';?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,38 +34,7 @@
 
 <body>
 
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white px-4 fixed-top">
-            <div class="container-fluid">
-                <a class="navbar-brand fs-3" href="#">
-                    <i class="bi bi-square-fill text-primary fs-4"></i>
-                    <span class="fw-bold">Arun Giri</span>
-                    <span class="d-none d-sm-inline-block"> / Software Developer</span>
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fs-6 text-start">
-                        <li class="nav-item">
-                            <a class="nav-link active text-primary" aria-current="page" href="#">ABOUT ME</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">RESUME</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">PROJECTS</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">CONTACT</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
+    <?php include 'include/header.php';?>
 
     <section class="resume">
         <div class="container-fluid">
@@ -265,78 +236,8 @@
         </div>
     </section>
 
-    <footer class="px-4 pt-5">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-0 col-sm-0 col-md-6 col-lg-6 mb-5 d-none d-lg-inline-block">
-                    <div class="row">
-                        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                            <i class="bi bi-c-square"></i>
-                            2024 by Arun Giri
-                        </div>
-                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 fw-bold">
-                            <a href="#" class="text-decoration-none">
-                                Download CV
-                                <i class="bi bi-download"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-12 col-md-12 col-lg-6">
-                    <div class="row text-center">
-                        <div class="col-6 col-sm-6 col-md-3 col-lg-4 mb-5">
-                            <div class="row">
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 fw-bold">
-                                    Call
-                                </div>
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                                    <a href="tel:+919547676205" class="text-decoration-none text-dark">954-767-6205</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-3 col-lg-4 mb-5">
-                            <div class="row">
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 fw-bold">
-                                    Write
-                                </div>
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                                    <a href="mailto:giri.arun592@gmail.com"
-                                        class="text-decoration-none text-dark">giri.arun592@gmail.com</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-3 col-lg-4 mb-5">
-                            <div class="row">
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 fw-bold">
-                                    Follow
-                                </div>
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                                    <a href="#"><i class="bi bi-whatsapp mx-1 text-dark"></i></a>
-                                    <a href="#"><i class="bi bi-whatsapp mx-1 text-dark"></i></a>
-                                    <a href="#"><i class="bi bi-whatsapp mx-1 text-dark"></i></a>
-                                    <a href="#"><i class="bi bi-whatsapp mx-1 text-dark"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-3 col-lg-4 mb-5 d-lg-none d-inline-block">
-                            <div class="row">
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                                    <i class="bi bi-c-square"></i>
-                                    2024 by Arun Giri
-                                </div>
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 fw-bold">
-                                    <a href="#" class="text-decoration-none">
-                                        Download CV
-                                        <i class="bi bi-download"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <?php include 'include/footer.php';?>
+    
 </body>
 
 </html>

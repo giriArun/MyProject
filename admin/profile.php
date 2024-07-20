@@ -21,8 +21,6 @@
                         <div class="col-12 col-sm-10 col-md-10 col-lg-10 bg-white shadow py-5 px-5">
                             <div class="row">
                                 <?php
-                                    print_r($userData);
-                                    //print_r($addressData);
                                     if( !$userData[ "status" ] ){
                                         echo "error message!";
                                     } else {
@@ -166,7 +164,10 @@
                                                         $imageId = $userData[ "userId" ];
                                                     ?>
                                                     <label for="uploadImage<?=$imageCount?>">
-                                                        <img src="../asset/images/icon/profile_icon.png" id="uploadedImage<?=$imageCount?>" class="img-responsive img-circle" />
+                                                        <img src="../asset/images/uploadImages/<?=$userData[ "userPhoto" ];?>" 
+                                                            id="uploadedImage<?=$imageCount?>" 
+                                                            class="img-responsive img-circle" 
+                                                            onerror="this.onerror=null; this.src='../asset/images/icon/profile_icon.png'"/>
                                                         <div class="overlay">
                                                             <div class="text">Click to Change Profile Image</div>
                                                         </div>
@@ -188,12 +189,15 @@
                                                 <label for="validationMapImage" class="form-label text-secondary">Map Image</label>
                                                 <div class="image_area">
                                                     <?php
-                                                        $imageCount = 1;
+                                                        $imageCount = 2;
                                                         $imageName = "map";
                                                         $imageId = $userData[ "userId" ];
                                                     ?>
                                                     <label for="uploadImage<?=$imageCount?>">
-                                                        <img src="../asset/images/icon/profile_icon.png" id="uploadedImage<?=$imageCount?>" class="img-responsive img-circle" />
+                                                        <img src="../asset/images/uploadImages/<?=$addressData[ "mapImage" ];?>" 
+                                                            id="uploadedImage<?=$imageCount?>" 
+                                                            class="img-responsive img-circle" 
+                                                            onerror="this.onerror=null; this.src='../asset/images/icon/map-pin.png'"/>
                                                         <div class="overlay">
                                                             <div class="text">Click to Change Map Image</div>
                                                         </div>

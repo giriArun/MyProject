@@ -1,76 +1,7 @@
 <?php
-    class usersService{
-        public function insertUser(
-            $firstName,
-            $lastName,
-            $email,
-            $phone,
-            $termAndCondition,
-            $createdBy = 0
-        ){
-            global $conn;
+    class frontEndServices{
 
-            $sql = "
-                INSERT INTO users (
-                    users_first_name, 
-                    users_last_name, 
-                    users_email,
-                    users_phone,
-                    users_terms,
-                    created_by
-                ) VALUES (
-                    '$firstName', 
-                    '$lastName', 
-                    '$email',
-                    '$phone',
-                    $termAndCondition,
-                    $createdBy
-                )
-            ";
-    
-            if ( mysqli_query( $conn, $sql ) ) {
-                $last_id = mysqli_insert_id( $conn );
-            } else {
-                $last_id = 0;
-            }
-    
-            return $last_id;
-        } 
-
-        public function updateUser(
-            $userId,
-            $firstName,
-            $lastName,
-            $email,
-            $phone,
-            $modifiedBy = 0
-        ){
-            global $conn;
-
-            $profileImage = 'profile_' . $userId . '.png';
-
-            $sql = "
-                UPDATE users 
-                SET users_first_name = '$firstName',
-                    users_last_name = '$lastName',
-                    users_email = '$email',
-                    users_phone = '$phone',
-                    users_photo = '$profileImage',
-                    modified_on = now(),
-                    modified_by = $modifiedBy
-                WHERE users_id = $userId
-            ";
-
-            if (mysqli_query($conn, $sql)) {
-                $last_id = $userId;
-            } else {
-                $last_id = 0;
-            }
-    
-            return $last_id;
-        } 
-
-        public function getUserByUserId( $userId ){
+        public function getHeaderFooterData( $userId ){
             global $conn;
             
             $sql = "
@@ -78,8 +9,7 @@
                     users_last_name,
                     users_email,
                     users_phone,
-                    users_photo,
-                    isAdmin
+                    users_photo
                 FROM users
                 WHERE users_id = $userId
             ";
@@ -103,36 +33,58 @@
                 $returnArray[ "userEmail" ] = $queryResult[ "users_email" ];
                 $returnArray[ "userPhone" ] = $queryResult[ "users_phone" ];
                 $returnArray[ "userPhoto" ] = $queryResult[ "users_photo" ];
-                $returnArray[ "isAdmin" ] = $queryResult[ "isAdmin" ];
-                $returnArray[ "status" ] = true;
-                $returnArray[ "userId" ] = $userId;
             }
 
             return $returnArray;
         } 
 
-        public function getUserIdByEmailOrPhone( $emailPhone ){
+        public function getUserAddressDetails( $userId ){
             global $conn;
             
             $sql = "
-                SELECT users_id
-                FROM users
-                WHERE isActive = 1
-                AND (
-                    users_email = '$emailPhone'
-                    OR users_phone = '$emailPhone'
-                )
-                ORDER BY users_id DESC
-                LIMIT 1
+                SELECT address,
+                    police_station,
+                    city_town,
+                    district,
+                    pin,
+                    state,
+                    country,
+                    map_url,
+                    map_image
+                FROM address
+                WHERE users_id_fk = $userId
             ";
 
             $result = mysqli_query( $conn, $sql );
 
-            if ( mysqli_num_rows( $result ) > 0 ){
-                return mysqli_fetch_assoc( $result )[ "users_id" ];
-            } else {
-                return 0;
+            
+            $returnArray = array( 
+                "address" => "", 
+                "policeStation" => "", 
+                "cityTown" => "", 
+                "district" => '', 
+                "pin" => "",
+                "state" => "",
+                "country" => "",
+                "mapUrl" => "",
+                "mapImage" => ""
+            );
+
+            if( mysqli_num_rows( $result ) > 0 ){
+                $queryResult = mysqli_fetch_assoc( $result );
+
+                $returnArray[ "address" ] = $queryResult[ "address" ];
+                $returnArray[ "policeStation" ] = $queryResult[ "police_station" ];
+                $returnArray[ "cityTown" ] = $queryResult[ "city_town" ];
+                $returnArray[ "district" ] = $queryResult[ "district" ];
+                $returnArray[ "pin" ] = $queryResult[ "pin" ];
+                $returnArray[ "state" ] = $queryResult[ "state" ];
+                $returnArray[ "country" ] = $queryResult[ "country" ];
+                $returnArray[ "mapUrl" ] = $queryResult[ "map_url" ];
+                $returnArray[ "mapImage" ] = $queryResult[ "map_image" ];
             }
+
+            return $returnArray;
         }
 
         public function isEmailExist( $email, $userId = 0 ){
