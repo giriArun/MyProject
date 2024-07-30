@@ -9,7 +9,7 @@
         ){
             $sql = "
                 INSERT INTO password (
-                    users_id_fk, 
+                    user_id_fk, 
                     password_hash, 
                     isOneTime,
                     created_by
@@ -40,7 +40,7 @@
                 SELECT password_id,
                     isOneTime
                 FROM password
-                WHERE users_id_fk = $userId
+                WHERE user_id_fk = $userId
                 AND password_hash = '$passwordHash'
                 AND isOneTime < 2
                 ORDER BY password_id DESC

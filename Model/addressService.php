@@ -5,7 +5,7 @@
             
             $sql = "
                 SELECT address_id,
-                    users_id_fk,
+                    user_id_fk,
                     address,
                     police_station,
                     city_town,
@@ -19,9 +19,9 @@
             ";
 
             if( $userId > 0 ){
-                $sql .= " WHERE users_id_fk = $userId ";
+                $sql .= " WHERE user_id_fk = $userId ";
             } else if( $addressId > 0 ){
-                $sql .= " WHERE users_id_fk = $addressId ";
+                $sql .= " WHERE user_id_fk = $addressId ";
             }
 
             $result = mysqli_query( $conn, $sql );
@@ -47,7 +47,7 @@
                 $returnArray = array(
                     "status" => true,
                     "addressId" => $queryResult[ "address_id" ],
-                    "usersId" => $queryResult[ "users_id_fk" ],
+                    "usersId" => $queryResult[ "user_id_fk" ],
                     "address" => $queryResult[ "address" ],
                     "policeStation" => $queryResult[ "police_station" ],
                     "cityOrTown" => $queryResult[ "city_town" ],
@@ -82,7 +82,7 @@
             
             $sql = "
                 INSERT INTO address (
-                    users_id_fk,
+                    user_id_fk,
                     address, 
                     police_station, 
                     city_town,
@@ -148,7 +148,7 @@
                     map_image = '$mapImage',
                     modified_on = now(),
                     modified_by = $modifiedBy
-                WHERE users_id_fk = $userId
+                WHERE user_id_fk = $userId
                 AND address_id = $addressId
             ";
             

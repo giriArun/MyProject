@@ -6,6 +6,8 @@
     integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
     crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-4.0.0-beta.js"></script>
+<!-- data table -->
+<script src="https://cdn.datatables.net/2.1.0/js/dataTables.min.js"></script>
 
     
 <script src="../asset/js/admin.js"></script>

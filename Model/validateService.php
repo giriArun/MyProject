@@ -91,5 +91,38 @@
                 return false;
             }
         }
+    
+        public function validateString($name){
+            $name = trim($name);
+    
+            if( strlen($name) > 0 && preg_match('/^[0-9a-zA-Z.,-_ ]+$/', $name) ){
+                return true;
+            } else {
+                return false;
+            }
+        }
+    
+        public function validateDate($date){
+            $date = trim($date);
+            $date = date_create($date);
+
+            if( $date == "" ){
+                return false;
+            } else {
+                $date = date_format($date,"d/m/Y");
+    
+                $dateArray  = explode('/', $date);
+    
+                if (count($dateArray) == 3) {
+                    if (checkdate($dateArray[1], $dateArray[0], $dateArray[2])) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+        }
     }
 ?>

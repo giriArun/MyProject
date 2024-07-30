@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 DROP TABLE IF EXISTS `password`;
 CREATE TABLE IF NOT EXISTS `password` (
   `password_id` int(11) NOT NULL AUTO_INCREMENT,
-  `users_id_fk` int(11) NOT NULL,
+  `user_id_fk` int(11) NOT NULL,
   `password_hash` varchar(1000) DEFAULT NULL,
   `isOneTime` tinyint(2) NOT NULL DEFAULT '0',
   `created_on` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,

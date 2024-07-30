@@ -5,13 +5,13 @@
             global $conn;
             
             $sql = "
-                SELECT users_first_name,
-                    users_last_name,
-                    users_email,
-                    users_phone,
-                    users_photo
+                SELECT user_first_name,
+                    user_last_name,
+                    user_email,
+                    user_phone,
+                    user_photo
                 FROM users
-                WHERE users_id = $userId
+                WHERE user_id = $userId
             ";
 
             $result = mysqli_query( $conn, $sql );
@@ -28,11 +28,11 @@
             if( mysqli_num_rows( $result ) > 0 ){
                 $queryResult = mysqli_fetch_assoc( $result );
 
-                $returnArray[ "userFirstName" ] = $queryResult[ "users_first_name" ];
-                $returnArray[ "userLastName" ] = $queryResult[ "users_last_name" ];
-                $returnArray[ "userEmail" ] = $queryResult[ "users_email" ];
-                $returnArray[ "userPhone" ] = $queryResult[ "users_phone" ];
-                $returnArray[ "userPhoto" ] = $queryResult[ "users_photo" ];
+                $returnArray[ "userFirstName" ] = $queryResult[ "user_first_name" ];
+                $returnArray[ "userLastName" ] = $queryResult[ "user_last_name" ];
+                $returnArray[ "userEmail" ] = $queryResult[ "user_email" ];
+                $returnArray[ "userPhone" ] = $queryResult[ "user_phone" ];
+                $returnArray[ "userPhoto" ] = $queryResult[ "user_photo" ];
             }
 
             return $returnArray;
@@ -52,7 +52,7 @@
                     map_url,
                     map_image
                 FROM address
-                WHERE users_id_fk = $userId
+                WHERE user_id_fk = $userId
             ";
 
             $result = mysqli_query( $conn, $sql );
@@ -91,13 +91,13 @@
             global $conn;
 
             $sql = "
-                SELECT users_email
+                SELECT user_email
                 FROM users
-                WHERE users_email = '$email'
+                WHERE user_email = '$email'
             ";
 
             if( $userId > 0 ){
-                $sql .= " AND users_id != $userId ";
+                $sql .= " AND user_id != $userId ";
             }
 
             $result = mysqli_query( $conn, $sql );
@@ -113,13 +113,13 @@
             global $conn;
 
             $sql = "
-                SELECT users_phone
+                SELECT user_phone
                 FROM users
-                WHERE users_phone = '$phone'
+                WHERE user_phone = '$phone'
             ";
 
             if( $userId > 0 ){
-                $sql .= " AND users_id != $userId ";
+                $sql .= " AND user_id != $userId ";
             }
 
             $result = mysqli_query( $conn, $sql );
@@ -135,9 +135,9 @@
             global $conn;
 
             $sql = "
-                SELECT users_id
+                SELECT user_id
                 FROM users
-                WHERE users_id = $userId
+                WHERE user_id = $userId
             ";
 
             $result = mysqli_query( $conn, $sql );
@@ -153,7 +153,7 @@
             global $conn;
             
             $sql = "
-                SELECT users_id
+                SELECT user_id
                 FROM users
                 WHERE isAdmin = 1
                 AND isActive = 1
@@ -165,7 +165,7 @@
             if( mysqli_num_rows( $result ) > 0 ){
                 $queryResult = mysqli_fetch_assoc( $result );
 
-                return $queryResult[ "users_id" ];
+                return $queryResult[ "user_id" ];
             } else {
                 return 0;
             }

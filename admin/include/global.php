@@ -13,6 +13,7 @@
     include '../model/dbConnection.php';
     require_once '../model/usersService.php';
     require_once '../model/addressService.php';
+    require_once '../model/projectService.php';
 
     $usersService = new usersService( );
     //session_unset();
@@ -42,31 +43,81 @@
         }
     }
 
+    $id = isset( $_GET[ 'id' ] ) ? intval( $_GET[ 'id' ] ) : 0;
+
     switch ( strtolower( $fileName ) ) {
         case 'signup.php':
             $pageTitle = 'SignUp';
+            $parentClass = "signUp";
             break;
         case 'login.php':
             $pageTitle = 'LogIn';
+            $parentClass = "logIn";
             break;
         case 'index.php':
             $pageTitle = 'Index';
+            $parentClass = "index";
             break;
         case 'profile.php':
             $addressService = new addressService( );
 
             $pageTitle = 'Profile';
+            $parentClass = "profile";
+
             $userData = $usersService->getUserByUserId( $userId = $_SESSION[ 'userId' ] );
             $addressData = $addressService->getAddressById( $userId = $_SESSION[ 'userId' ] );
             break;
-        case 'label3':
-            $pageTitle = 'SignUp';
+        case 'projects.php':
+            $projectService = new projectService( );
+
+            $pageTitle = 'Projects';
+            $parentClass = "projects";
+
+            if( isset( $_POST[ 'deleteId' ] ) && isset( $_POST[ 'deleteType' ] ) ){
+                $deleteType = trim( $_POST[ 'deleteType' ] );
+
+                if( $deleteType == "projectRoleType" ){
+                    $projectService->deleteProjectRole( $_POST[ 'deleteId' ] );
+                }
+            }
+
+            $projectsData = $projectService->getProjects( );
+            $projectRoleData = $projectService->getProjectRoleType( );
+            break;
+        case 'addeditprojectrole.php':
+            $projectService = new projectService( );
+
+            $pageTitle = 'Add Edit Project Role';
+            $parentClass = "addEditProjectRole";
+
+            $projectroleId = 0;
+            $projectRoleType = "";
+
+            if( $id > 0 ){
+                $projectRoleData = $projectService->getProjectRoleType( $id );
+
+                if( $projectRoleData[ "status" ] && count( $projectRoleData[ "data" ] ) ){
+                    $projectroleId = $projectRoleData[ "data" ][ 0 ][ "projectroleId" ];
+                    $projectRoleType = $projectRoleData[ "data" ][ 0 ][ "projectRoleType" ];
+                }
+            }
+            break;
+        case 'addeditproject.php':
+            $projectService = new projectService( );
+
+            $pageTitle = 'Add Edit Project';
+            $parentClass = "addEditProject";
+          
+            $projectsData = $projectService->getProjects( $userId = 0, $projectId = $id );
+            $projectRoleData = $projectService->getProjectRoleType( );
             break;
         case 'label3':
             $pageTitle = 'SignUp';
+            $parentClass = "home";
             break;
         default:
             $pageTitle = 'Home';
+            $parentClass = "home";
       }
 
    /*  print_r($pageTitle);

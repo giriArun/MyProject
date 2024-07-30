@@ -3,6 +3,7 @@
     require_once 'validateService.php';
     require_once 'usersService.php';
     require_once 'passwordService.php';
+    require_once 'projectService.php';
     require_once 'addressService.php';
     //usersService.php
 
@@ -11,6 +12,7 @@
 
     $usersService = new usersService( );
     $passwordService = new passwordService( );
+    $projectService = new projectService( );
     $validateService = new validateService( );
     $addressService = new addressService( );
 
@@ -179,6 +181,7 @@
 
                     if( $passwordData[ "status" ] && !$passwordData[ "newPassword" ]){
                         $_SESSION[ "userId" ] = $userId;
+                        $_SESSION[ "isAdmin" ] = $usersService->getUserAdmin( $userId );
                     }
 
                     return $passwordData;
@@ -323,8 +326,8 @@
                     array_push($message,"Please enter a valid Map URL.");
                 }
 
-                if(!$validateService->validateStringLength( $string = $country, $maxLength = 50, $minLength = 1)){
-                    array_push($message,"Please enter a Country within 50 characters.");
+                if(!$validateService->validateStringLength( $string = $country, $maxLength = 1000, $minLength = 1)){
+                    array_push($message,"Please enter a Map URL within 1000 characters.");
                 }
             }
             
@@ -406,6 +409,158 @@
         }
     }
 
+    function projectRoleTypeSubmit( $postData ){
+        $projectRoleId = $postData['projectRoleId'];
+        $roleType = $postData['roleType'];
+
+        $message = [];
+        global $projectService;
+        global $validateService;
+
+        //Validate project role type
+        if(!$validateService->validateString($roleType)){
+            array_push($message,"Please enter a valid Project Role Type.");
+        }
+
+        if(count($message)){
+            return array("status" => false, "message" => $message, "data" => '');
+        } else {
+            if( $projectRoleId > 0 ){
+                $lastId = $projectService->updateProjectRole(
+                    $projectRoleId = $projectRoleId,
+                    $roleType = $roleType
+                );
+            } else {
+                $lastId = $projectService->insertProjectRole( $roleType = $roleType );
+            }
+
+            if( $lastId > 0 ){
+                array_push($message,"Project role type update successfully.");
+                return array( "status" => true, "message" => $message );
+            } else {
+                array_push($message,"Project role type update failed.");
+                return array( "status" => false, "message" => $message );
+            }
+        }
+    }
+    
+    function projectSubmit( $postData ){
+        $projectId = $postData['projectId'];
+        $projectName = $postData['projectName'];
+        $roleTypeId = $postData['roleTypeId'];
+        $startDate = $postData['startDate'];
+        $endDate = "";
+        $continueProject = isset($_POST['continueProject']) ? 1 : 0;
+        $technologies = $postData['technologies'];
+        $tools = $postData['tools'];
+        $projectDescription = $postData['myTinyMce'];
+        $projectUrl = $postData['projectUrl'];
+
+        if( !$continueProject ){
+            $endDate = $postData['endDate'];
+        }
+
+        $projectId = is_numeric($projectId)? $projectId : 0;
+        
+        $message = [];
+        global $projectService;
+        global $validateService;
+
+        //Validate User fields
+        if( !$validateService->validateString($projectName) ){
+            array_push($message,"Please enter a valid Project Name.");
+        } elseif( !$validateService->validateStringLength( $string = $projectName, $maxLength = 100, $minLength = 1) ){
+            array_push($message,"Please enter a Project Name within 100 characters.");
+        }
+
+        if( !$validateService->validateNumber($roleTypeId) || !$validateService->validateStringLength( $string = $roleTypeId, $maxLength = 10, $minLength = 1) ){
+            array_push($message,"Please select a valid Project Role.");
+        }
+
+        if( $startDate == "" || !$validateService->validateDate($startDate) ){
+            array_push($message,"Please enter a valid Start Date.");
+        }
+
+        if( !$continueProject && ( $endDate == "" || !$validateService->validateDate($endDate) ) ){
+            array_push($message,"Please enter a valid End Date.");
+        }
+
+        if( strlen($technologies) > 0 ){
+            if(!$validateService->validateString($technologies)){
+                array_push($message,"Please enter a valid Technologies.");
+            }
+
+            if(!$validateService->validateStringLength( $string = $technologies, $maxLength = 250, $minLength = 1)){
+                array_push($message,"Please enter a Technologies within 250 characters.");
+            }
+        }
+
+        if( strlen($tools) > 0 ){
+            if(!$validateService->validateString($tools)){
+                array_push($message,"Please enter a valid Tools.");
+            }
+
+            if(!$validateService->validateStringLength( $string = $tools, $maxLength = 250, $minLength = 1)){
+                array_push($message,"Please enter a Tools within 250 characters.");
+            }
+        }
+
+        if( strlen($projectDescription) > 0 && !$validateService->validateStringLength( $string = $projectDescription, $maxLength = 2000, $minLength = 1)){
+            array_push($message,"Please enter a Project Description within 2000 characters.");
+        }
+            
+        if( strlen($projectUrl) > 0 ){
+            if(!$validateService->validateUrl($projectUrl)){
+                array_push($message,"Please enter a valid Project URL.");
+            }
+
+            if(!$validateService->validateStringLength( $string = $projectUrl, $maxLength = 200, $minLength = 1)){
+                array_push($message,"Please enter a Project URL within 200 characters.");
+            }
+        }
+
+        if(count($message)){
+            return array("status" => false, "message" => $message, "data" => '');
+        } else {
+            if( $projectId > 0 ){
+                $projectLastId = $projectService->updateProject(
+                    $projectId = $projectId,
+                    $projectName = $projectName,
+                    $roleTypeId = $roleTypeId,
+                    $startDate = $startDate,
+                    $endDate = $endDate,
+                    $continueProject = $continueProject,
+                    $technologies = $technologies,
+                    $tools = $tools,
+                    $projectUrl = $projectUrl,
+                    $projectDescription = htmlentities( $projectDescription, ENT_QUOTES )
+                );
+            } else {
+                $projectLastId = $projectService->insertProject(
+                    $projectName = $projectName,
+                    $roleTypeId = $roleTypeId,
+                    $startDate = $startDate,
+                    $endDate = $endDate,
+                    $continueProject = $continueProject,
+                    $technologies = $technologies,
+                    $tools = $tools,
+                    $projectUrl = $projectUrl,
+                    $projectDescription = htmlentities( $projectDescription, ENT_QUOTES )
+                );
+            }
+    
+            if( $projectLastId > 0 ){
+                array_push($message,"User details update successfully.");
+
+                return array( "status" => true, "message" => $message, "data" => '' );
+            } else {
+                array_push($message,"Address details update failed.");
+
+                return array("status" => false, "message" => $message, "data" => '');
+            }
+        }
+    }
+
 
     if (array_key_exists("actionType",$_POST)){
         switch ($_POST['actionType']) {
@@ -420,6 +575,12 @@
                 break;
             case "profileSubmit":
                 print json_encode( profileSubmit( $_POST ) );
+                break;
+            case "projectRoleTypeSubmit":
+                print json_encode( projectRoleTypeSubmit( $_POST ) );
+                break;
+            case "addEditProject":
+                print json_encode( projectSubmit( $_POST ) );
                 break;
             default:
                 print json_encode([]);

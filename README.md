@@ -15,13 +15,19 @@ https://www.wix.com/website-template/view/html/2622?originUrl=https%3A%2F%2Fwww.
 
 ## DataBase
 :::users:::
-[users_id],[users_first_name],[users_last_name],[users_email],[users_phone],[users_terms],[isAdmin],[isActive],
+[user_id],[user_first_name],[user_last_name],[user_email],[user_phone],[user_terms],[isAdmin],[isActive],
 [created_on],[created_by],[modified_on],[modified_by]
 
 :::password:::
-[password_id],[users_id_fk],[password_hash],[isOneTime](default 0, active 1, deactive 2),
+[password_id],[user_id_fk],[password_hash],[isOneTime](default 0, active 1, deactive 2),
 [created_on],[created_by],[modified_on],[modified_by]
 
 :::address:::
-[address_id],[users_id_fk],[address],[police_station],[City_Town],[district],[pin],[state],[country],[map_url],[map_image],
+[address_id],[user_id_fk],[address],[police_station],[City_Town],[district],[pin],[state],[country],[map_url],[map_image],
 [created_on],[created_by],[modified_on],[modified_by]
+
+:::projects:::
+[project_id],[user_id_fk],[project_name],[project_site_url],[project_role_id_fk],[strat_date],[end_date],[project_technologies],[project_tools],[project_description],[project_image],[created_on],[created_by],[modified_on],[modified_by]
+
+:::project_roles:::
+[project_role_id],[project_role_type],[created_on],[created_by],[modified_on],[modified_by]

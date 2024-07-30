@@ -15,6 +15,29 @@
                     <li class="nav-item text-uppercase">
                         <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li>
+                    <?php
+                        if( $_SESSION[ "isAdmin" ] == 1 ){
+                            $aboutMeActive = in_array( $parentClass, 
+                                array( "projects", "addEditProjectRole", "addEditProject" ) 
+                            ) ? 'active' : '';
+                            $projectsActive = in_array( $parentClass, array( "projects", "addEditProjectRole", "addEditProject" ) ) ? 'active' : '';
+                            ?>
+                                <li class="nav-item dropdown text-uppercase">
+                                    <a class="nav-link dropdown-toggle <?=$aboutMeActive;?>" href="#" id="aboutMeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        About Me
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="aboutMeDropdown">
+                                        <li><a class="dropdown-item <?=$projectsActive;?>" href="projects.php">Projects</a></li>
+                                        <li><a class="dropdown-item" href="#">Link 2</a></li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li><a class="dropdown-item" href="#">Link 3</a></li>
+                                    </ul>
+                                </li>
+                            <?php
+                        }
+                    ?>
                     <li class="nav-item dropdown text-uppercase">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Task

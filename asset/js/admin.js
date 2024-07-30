@@ -97,6 +97,17 @@ function validatePlace(name) {
     }
 }
 
+function validateString(name) {
+    const pattern = new RegExp('^[0-9a-zA-Z.,-_ ]+$');
+    name = name.trim();
+
+    if (name.length > 0 && pattern.test(name)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function validateUrl(name) {
     const pattern = new RegExp('/^(http|https|ftp):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/i');
     name = name.trim();
@@ -129,6 +140,8 @@ function validatedForm(
         returnMessage = validatePlace(data) ? "" : "Please enter a valid " + dataName + ".";
     } else if (dataType == 'url') {
         //returnMessage = validateUrl(data) ? "" : "Please enter a valid " + dataName + ".";
+    } else if (dataType == 'string') {
+        returnMessage = validateString(data) ? "" : "Please enter a valid " + dataName + ".";
     }
 
     if (returnMessage == "" && maxLength > 0) {
@@ -403,6 +416,102 @@ $(function () {
                     _URL.revokeObjectURL(objectUrl);
                 };
                 img.src = objectUrl;
+            }
+        });
+    } else if (document.body.classList.contains('addEditProjectRole')) {    // Add Edit Project Role Type page
+        $("form[ name = 'form_projectRoleType' ]").submit(function (e) {
+            e.preventDefault();
+            var returnMessage = "";
+            var isAjaxCall = true;
+
+            $(this.elements).each(function (e) {
+                var minLength = $(this).attr('minlength');
+                var maxLength = $(this).attr('maxlength');
+                var dataType = $(this).data('type');
+                var dataName = $(this).data('name');
+                var dataValue = $(this).val();
+
+                if (typeof dataType != 'undefined' && ((dataValue).trim()).length > 0) {
+                    returnMessage = validatedForm(
+                        data = dataValue,
+                        dataType = dataType,
+                        dataName = dataName,
+                        minLength = minLength,
+                        maxLength = maxLength
+                    );
+
+                    if (returnMessage != "") {
+                        isAjaxCall = false;
+                        this.focus();
+                        $('div.valid-feedback, div.invalid-feedback', '.' + this.id).addClass('d-none');
+                        $('div.invalid-js-message', '.' + this.id).css('display', 'block').html(returnMessage);
+                    }
+                }
+            });
+
+            if (isAjaxCall) {
+                var formData = $(this).serializeArray();
+                formData.push({ name: 'actionType', value: 'projectRoleTypeSubmit' });
+
+                ajaxCall(formData = formData, redirectUrl = "projects.php");
+            }
+
+        });
+
+        $('.addEditProjectRole .form-control').on("keyup", function (e) {
+            if ($('div.valid-feedback, div.invalid-feedback', '.' + this.id).hasClass('d-none')) {
+                $('div.valid-feedback, div.invalid-feedback', '.' + this.id).removeClass('d-none');
+                $('div.invalid-js-message', '.' + this.id).css('display', 'none');
+            }
+        });
+    } else if (document.body.classList.contains('addEditProject')) {    // Add Edit Project page
+        $("form[ name = 'form_projects' ]").submit(function (e) {
+            e.preventDefault();
+            var returnMessage = "";
+            var isAjaxCall = true;
+
+            $(this.elements).each(function (e) {
+                var minLength = $(this).attr('minlength');
+                var maxLength = $(this).attr('maxlength');
+                var dataType = $(this).data('type');
+                var dataName = $(this).data('name');
+                var dataValue = $(this).val();
+
+                /* if (typeof dataType != 'undefined' && ((dataValue).trim()).length > 0) {
+                    returnMessage = validatedForm(
+                        data = dataValue,
+                        dataType = dataType,
+                        dataName = dataName,
+                        minLength = minLength,
+                        maxLength = maxLength
+                    );
+
+                    if (returnMessage != "") {
+                        isAjaxCall = false;
+                        this.focus();
+                        $('div.valid-feedback, div.invalid-feedback', '.' + this.id).addClass('d-none');
+                        $('div.invalid-js-message', '.' + this.id).css('display', 'block').html(returnMessage);
+                    }
+                } */
+            });
+
+            if (isAjaxCall) {
+                var formData = $(this).serializeArray();
+                formData.push({ name: 'actionType', value: 'addEditProject' });
+
+                ajaxCall(formData = formData, redirectUrl = "");//projects.php
+            }
+
+        });
+
+        $('#continueProject').click(function () {
+            $('#validationEndDate').attr('disabled', $(this).is(':checked'));
+        });
+
+        $('.addEditProject .form-control').on("keyup", function (e) {
+            if ($('div.valid-feedback, div.invalid-feedback', '.' + this.id).hasClass('d-none')) {
+                $('div.valid-feedback, div.invalid-feedback', '.' + this.id).removeClass('d-none');
+                $('div.invalid-js-message', '.' + this.id).css('display', 'none');
             }
         });
     }

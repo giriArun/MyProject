@@ -6,7 +6,7 @@
     <?php include 'include/head.php';?>
 </head>
 
-<body>
+<body class="<?=$pageTitle;?>">
     <?php include 'include/header.php';?>
 
 
