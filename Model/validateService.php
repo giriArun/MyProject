@@ -60,8 +60,9 @@
     
         public function validateAddress($name){
             $name = trim($name);
-    
-            if( strlen($name) > 0 && preg_match('/^[0-9a-zA-Z,.:\-_ ]+$/', $name) ){
+            
+            if( strlen($name) > 0 && preg_match('/^[A-Za-z0-9!@#$%^&* \n(){}[\],.<>?\/-_=+;\'"]+/', $name) ){
+            //if( strlen($name) > 0 && preg_match('/^[0-9a-zA-Z,.:\-_ ]+$/', $name) ){
                 return true;
             } else {
                 return false;
@@ -95,7 +96,7 @@
         public function validateString($name){
             $name = trim($name);
     
-            if( strlen($name) > 0 && preg_match('/^[0-9a-zA-Z.,-_ ]+$/', $name) ){
+            if( strlen($name) > 0 && preg_match('/^[0-9a-zA-Z.,-_ !@#%&]+$/', $name) ){
                 return true;
             } else {
                 return false;
@@ -123,6 +124,11 @@
                     return false;
                 }
             }
+        }
+
+        // redirect function
+        public function redirectToHome( $rootPathAdmin ){
+            header( "Location: " . $rootPathAdmin . "/index.php" );
         }
     }
 ?>

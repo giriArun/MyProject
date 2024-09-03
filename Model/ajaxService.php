@@ -1,20 +1,25 @@
 <?php
-    include 'dbConnection.php';
-    require_once 'validateService.php';
-    require_once 'usersService.php';
-    require_once 'passwordService.php';
-    require_once 'projectService.php';
-    require_once 'addressService.php';
+    //include 'dbConnection.php';
+    include( $_SERVER['DOCUMENT_ROOT'] . '/myproject/model/dbConnection.php' );
+
+    require_once $_config[ "absolute_path" ] . '/model/addressService.php';
+    require_once $_config[ "absolute_path" ] . '/model/educationService.php';
+    require_once $_config[ "absolute_path" ] . '/model/passwordService.php';
+    require_once $_config[ "absolute_path" ] . '/model/projectService.php';
+    require_once $_config[ "absolute_path" ] . '/model/skillService.php';
+    require_once $_config[ "absolute_path" ] . '/model/usersService.php';
+    require_once $_config[ "absolute_path" ] . '/model/validateService.php';
     //usersService.php
 
     // Start the session
     session_start();
 
-    $usersService = new usersService( );
+    $addressService = new addressService( );
     $passwordService = new passwordService( );
     $projectService = new projectService( );
+    $skillService = new skillService( );
+    $usersService = new usersService( );
     $validateService = new validateService( );
-    $addressService = new addressService( );
 
     function validateName($name){
         $name = trim($name);
@@ -560,6 +565,144 @@
             }
         }
     }
+    
+    function technicalSkillSubmit( $postData ){
+        $skillId = $postData['skillId'];
+        $skillName = $postData['skillName'];
+        $ratingScale = $postData['ratingScale'];
+
+        $skillId = is_numeric($skillId)? $skillId : 0;
+        
+        $message = [];
+        global $projectService;
+        global $validateService;
+        global $skillService;
+
+        //Validate User fields
+        if( !$validateService->validateString($skillName) ){
+            array_push($message,"Please enter a valid Skill Name.");
+        } elseif( !$validateService->validateStringLength( $string = $skillName, $maxLength = 50, $minLength = 1) ){
+            array_push($message,"Please enter a Skill Name within 100 characters.");
+        }
+
+        if(count($message)){
+            return array("status" => false, "message" => $message, "data" => '');
+        } else {
+            if( $skillId > 0 ){
+                $skillLastId = $skillService->updateTechnicalSkill(
+                    $skillId = $skillId,
+                    $skillName = $skillName,
+                    $ratingScale = $ratingScale
+                );
+            } else {
+                $skillLastId = $skillService->insertTechnicalSkill(
+                    $skillName = $skillName,
+                    $ratingScale = $ratingScale
+                );
+            }
+    
+            if( $skillLastId > 0 ){
+                array_push($message,"Skill details update successfully.");
+
+                return array( "status" => true, "message" => $message, "data" => '' );
+            } else {
+                array_push($message,"Skill details update failed.");
+
+                return array("status" => false, "message" => $message, "data" => '');
+            }
+        }
+    }
+    
+    function addEditEducationSubmit( $postData ){
+        $educationId = $postData['educationId'];
+        $institutionName = $postData['institutionName'];
+        $degreeName = $postData['degreeName'];
+        $startDate = $postData['startDate'];
+        $endDate = "";
+        $continueDegree = isset($_POST['continueDegree']) ? 1 : 0;
+        $institutionAddress = $postData['institutionAddress'];
+        $degreeDetail = $postData['degreeDetail'];
+
+        if( !$continueDegree ){
+            $endDate = $postData['endDate'];
+        }
+
+        $educationId = is_numeric($educationId)? $educationId : 0;
+        
+        $message = [];
+        $educationService = new educationService( );
+        global $validateService;
+
+        //Validate User fields
+        if( !$validateService->validateString($institutionName) ){
+            array_push($message,"Please enter a valid Institution Name.");
+        } elseif( !$validateService->validateStringLength( $string = $institutionName, $maxLength = 100, $minLength = 1) ){
+            array_push($message,"Please enter a Institution Name within 100 characters.");
+        }
+
+        if( !$validateService->validateString($degreeName) ){
+            array_push($message,"Please enter a valid Degree Name.");
+        } elseif( !$validateService->validateStringLength( $string = $degreeName, $maxLength = 20, $minLength = 1) ){
+            array_push($message,"Please enter a Degree Name within 20 characters.");
+        }
+
+        if( $startDate == "" || !$validateService->validateDate($startDate) ){
+            array_push($message,"Please enter a valid Start Date.");
+        }
+
+        if( !$continueDegree && ( $endDate == "" || !$validateService->validateDate($endDate) ) ){
+            array_push($message,"Please enter a valid End Date.");
+        }
+
+        if( !$validateService->validateAddress($institutionAddress) ){
+            array_push($message,"Please enter a valid Institution Address.");
+        } elseif( !$validateService->validateStringLength( $string = $institutionAddress, $maxLength = 250, $minLength = 1) ){
+            array_push($message,"Please enter a Institution Address within 250 characters.");
+        }
+
+        if( !$validateService->validateAddress($degreeDetail) ){
+            array_push($message,"Please enter a valid Degree Detail.");
+        } elseif( !$validateService->validateStringLength( $string = $degreeDetail, $maxLength = 500, $minLength = 1) ){
+            array_push($message,"Please enter a Degree Detail within 500 characters.");
+        }
+
+        if(count($message)){
+            return array("status" => false, "message" => $message, "data" => '');
+        } else {
+            if( $educationId > 0 ){
+                $educationLastId = $educationService->updateEducation(
+                    $educationId = $educationId,
+                    $institutionName = $institutionName,
+                    $degreeName = $degreeName,
+                    $startDate = $startDate,
+                    $endDate = $endDate,
+                    $continueDegree = $continueDegree,
+                    $institutionAddress = $institutionAddress,
+                    $degreeDetail = $degreeDetail
+                );
+            } else {
+                $educationLastId = $educationService->insertEducation(
+                    $institutionName = $institutionName,
+                    $degreeName = $degreeName,
+                    $startDate = $startDate,
+                    $endDate = $endDate,
+                    $continueDegree = $continueDegree,
+                    $institutionAddress = $institutionAddress,
+                    $degreeDetail = $degreeDetail
+                );
+            }
+    
+            if( $educationLastId > 0 ){
+                array_push($message,"Education details update successfully.");
+
+                return array( "status" => true, "message" => $message, "data" => '' );
+            } else {
+                array_push($message,"Education details update failed.");
+
+                return array("status" => false, "message" => $message, "data" => '');
+            }
+        }
+    }
 
 
     if (array_key_exists("actionType",$_POST)){
@@ -581,6 +724,12 @@
                 break;
             case "addEditProject":
                 print json_encode( projectSubmit( $_POST ) );
+                break;
+            case "technicalSkillSubmit":
+                print json_encode( technicalSkillSubmit( $_POST ) );
+                break;
+            case "addEditEducationSubmit":
+                print json_encode( addEditEducationSubmit( $_POST ) );
                 break;
             default:
                 print json_encode([]);

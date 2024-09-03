@@ -1,8 +1,11 @@
 <?php
+    // Config File
+    //$_config = include( $_SERVER['DOCUMENT_ROOT'] . '/myproject/private/config.php' );
+
     //Session start
     if(session_id( ) == '' || !isset( $_SESSION ) || session_status( ) === PHP_SESSION_NONE) {
         // session isn't started
-        session_start();
+        session_start( );
     }
 
     // Get File path & name
@@ -10,16 +13,26 @@
     $fileNameArray = explode( "/", $filePath );
     $fileName = end( $fileNameArray );
 
-    include '../model/dbConnection.php';
-    require_once '../model/usersService.php';
-    require_once '../model/addressService.php';
-    require_once '../model/projectService.php';
+    include( $_SERVER['DOCUMENT_ROOT'] . '/myproject/model/dbConnection.php' );
+    
+    require_once $_config[ "absolute_path" ] . '/model/addressService.php';
+    require_once $_config[ "absolute_path" ] . '/model/educationService.php';
+    require_once $_config[ "absolute_path" ] . '/model/projectService.php';
+    require_once $_config[ "absolute_path" ] . '/model/skillService.php';
+    require_once $_config[ "absolute_path" ] . '/model/usersService.php';
+    require_once $_config[ "absolute_path" ] . '/model/validateService.php';
 
     $usersService = new usersService( );
+
+    //redirect function start
+    $validateService = new validateService( );
+    
+    //redirect function end
+
     //session_unset();
     if( isset( $_SESSION[ 'userId' ] ) && $_SESSION[ 'userId' ] > 0 ){
         if( strtolower( $fileName ) == 'signup.php' || strtolower( $fileName ) == 'login.php' ){
-            header( "Location: index.php" );
+            header( "Location: " . $_config[ "root_path_admin" ] . "/index.php" );
         }
 
         if( !isset( $_SESSION[ 'userFirstName' ] ) || strlen( trim( $_SESSION[ 'userFirstName' ] ) ) == 0 ){
@@ -31,7 +44,7 @@
             } else {
                 // remove all session variables
                 session_unset();
-                header( "Location: login.php" );
+                header( "Location: " . $_config[ "root_path_admin" ] . "/login.php" );
             }
         }
     } else {
@@ -39,13 +52,14 @@
         session_unset();
 
         if( strtolower( $fileName ) != 'signup.php' && strtolower( $fileName ) != 'login.php' ){
-            header( "Location: login.php" );
+            header( "Location: " . $_config[ "root_path_admin" ] . "/login.php" );
         }
     }
 
     $id = isset( $_GET[ 'id' ] ) ? intval( $_GET[ 'id' ] ) : 0;
+    $fileName = strtolower( $fileName );
 
-    switch ( strtolower( $fileName ) ) {
+    switch ( $fileName ) {
         case 'signup.php':
             $pageTitle = 'SignUp';
             $parentClass = "signUp";
@@ -108,8 +122,79 @@
             $pageTitle = 'Add Edit Project';
             $parentClass = "addEditProject";
           
-            $projectsData = $projectService->getProjects( $userId = 0, $projectId = $id );
+            $projectsData = $projectService->getProjects( $userId = 0, $projectId = $id, $isProjectId = 1 );
             $projectRoleData = $projectService->getProjectRoleType( );
+            break;
+        case 'skills.php':
+            $skillService = new skillService( );
+
+            $pageTitle = 'Skills';
+            $parentClass = "skills";
+
+            if( isset( $_POST[ 'deleteId' ] ) && isset( $_POST[ 'deleteType' ] ) ){
+                $deleteType = trim( $_POST[ 'deleteType' ] );
+
+                if( $deleteType == "technicalSkillsType" ){
+                    $skillService->deleteTechnicalSkill( $_POST[ 'deleteId' ] );
+                }
+            }
+
+            $technicalSkillsData = $skillService->getTechnicalSkill( $skillId = 0 );
+            //$projectRoleData = $projectService->getProjectRoleType( );
+            break;
+        case 'addedittechnicalskill.php':
+            $skillService = new skillService( );
+
+            $pageTitle = 'Add Edit Technical Skill';
+            $parentClass = "addEditTechnicalSkill";
+            $technicalSkillData = [ ];
+            
+            if( $id > 0 ){
+                $technicalSkillData = $skillService->getTechnicalSkill( $skillId = $id );
+            }
+            break;
+        case 'education.php': case 'addediteducation.php':
+            if( $_SESSION[ "isAdmin" ] != 1 ){
+                $validateService->redirectToHome( $_config[ "root_path_admin" ] );
+            }
+
+            $educationService = new educationService( );
+            $pageTitle = "Education";
+            
+            if( isset( $_POST[ 'deleteId' ] ) && isset( $_POST[ 'deleteType' ] ) ){
+                $deleteType = trim( $_POST[ 'deleteType' ] );
+
+                if( $deleteType == "education" ){
+                    $educationService->deleteEducation( $_POST[ 'deleteId' ] );
+                }
+            }
+
+            if( $fileName == "education.php" ){
+                $parentClass = "education";
+                $educationData = $educationService->getEdication( $educationId = 0 );
+
+            } else if( $fileName == "addediteducation.php" ){
+                $parentClass = "addEditEducation";
+                
+                if( $id > 0 ){
+                    $pageTitle = "Edit " . $pageTitle;
+                    $educationData = $educationService->getEdication( $educationId = $id );
+                } else {
+                    $pageTitle = "Add " . $pageTitle;
+                    $educationData = [ ];
+                }
+            }
+            break;
+        case '11_addedittechnicalskill.php':
+            $skillService = new skillService( );
+
+            $pageTitle = 'Add Edit Technical Skill';
+            $parentClass = "addEditTechnicalSkill";
+            $technicalSkillData = [ ];
+            
+            if( $id > 0 ){
+                $technicalSkillData = $skillService->getTechnicalSkill( $skillId = $id );
+            }
             break;
         case 'label3':
             $pageTitle = 'SignUp';

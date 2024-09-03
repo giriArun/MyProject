@@ -13,9 +13,9 @@
         $projectId = 0;
         $projectName = "";
         $projectSiteUrl = "";
-        $stratDate = "";
+        $startDate = "";
         $endDate = "";
-        $isContinue = "";
+        $isContinue = 1;
         $projectTechnologies = "";
         $projectTools = "";
         $projectDescription = "";
@@ -28,7 +28,7 @@
             $projectId = $projectData[ "projectId" ];
             $projectName = $projectData[ "projectName" ];
             $projectSiteUrl = $projectData[ "projectSiteUrl" ];
-            $stratDate = $projectData[ "stratDate" ];
+            $startDate = $projectData[ "startDate" ];
             $endDate = $projectData[ "endDate" ];
             $isContinue = $projectData[ "isContinue" ];
             $projectTechnologies = $projectData[ "projectTechnologies" ];
@@ -50,9 +50,6 @@
                         <div class="col-0 col-sm-1 col-md-1 col-lg-1"></div>
                         <div class="col-12 col-sm-10 col-md-10 col-lg-10 bg-white shadow py-5 px-5">
                             <div class="row">
-    <?php
-        print_r($projectsData[ "data" ]);
-    ?>
                                 <form class="row g-3 needs-validation" name="form_projects" id="form_projects" method="post" novalidate>
                                     <input type="hidden" name="projectId" value="<?=$projectId;?>">
                                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xxl-8 validationProjectName">
@@ -82,7 +79,7 @@
                                     </div>
                                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xxl-4 validationStartDate">
                                         <label for="validationStartDate" class="form-label">Project Start Date</label>
-                                        <input type="date" class="form-control" id="validationStartDate" name="startDate" data-type="date" data-name="Project Start Date" value="<?=$stratDate;?>" required>
+                                        <input type="date" class="form-control" id="validationStartDate" name="startDate" data-type="date" data-name="Project Start Date" value="<?=$startDate;?>" required>
                                         <div class="valid-feedback">Looks good!</div>
                                         <div class="invalid-feedback">Please provide the Project Start Date.</div>
                                         <div class="invalid-js-message"></div>
@@ -118,9 +115,9 @@
                                         <div class="invalid-feedback">Please provide the Tools.</div>
                                         <div class="invalid-js-message"></div>
                                     </div>
-                                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xxl-6 validationProjectUrl">
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xxl-12 validationProjectUrl">
                                         <label for="validationProjectUrl" class="form-label">Project URL</label>
-                                        <input type="text" class="form-control" id="validationProjectUrl" name="projectUrl" maxlength="250" data-type="string" data-name="Project URL" value="<?=$projectSiteUrl?>">
+                                        <input type="text" class="form-control" id="validationProjectUrl" name="projectUrl" maxlength="250" data-type="url" data-name="Project URL" value="<?=$projectSiteUrl?>">
                                         <div class="valid-feedback">Looks good!</div>
                                         <div class="invalid-feedback">Please provide the Project URL.</div>
                                         <div class="invalid-js-message"></div>
@@ -135,8 +132,44 @@
                                         <div class="invalid-feedback">Please provide the Project Description.</div>
                                         <div class="invalid-js-message"></div>
                                     </div>
+                                    <?php
+                                        if( $projectId > 0 ){
+                                            ?>
+                                                <div class="col-12"><hr></div>
 
-
+                                                <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xxl-4 validationMapImage">
+                                                    <label for="validationMapImage" class="form-label">Project Image</label>
+                                                    <div class="image_area">
+                                                        <?php
+                                                            $imageCount = 1;
+                                                            $imageName = "project";
+                                                            $imageId = $projectId;
+                                                        ?>
+                                                        <label for="uploadImage<?=$imageCount?>">
+                                                            <img src="../asset/images/uploadImages/<?=$projectImage;?>" 
+                                                                id="uploadedImage<?=$imageCount?>" 
+                                                                class="img-responsive img-circle" 
+                                                                onerror="this.onerror=null; this.src='../asset/images/icon/project.png'"/>
+                                                            <div class="overlay">
+                                                                <div class="text">Click to Change Project Image</div>
+                                                            </div>
+                                                            <input type="file" 
+                                                                name="file_<?=$imageName?>" 
+                                                                class="image" 
+                                                                id="uploadImage<?=$imageCount?>" 
+                                                                data-image-count = <?=$imageCount?>
+                                                                data-image-name = <?=$imageName?>
+                                                                data-image-id = <?=$imageId?>
+                                                                style="display:none" />
+                                                        </label>
+                                                    </div>
+                                                    <div class="valid-feedback" id="uploadedImageText<?=$imageCount?>">Looks good!</div>
+                                                </div>
+                                            
+                                                <div class="col-12"><hr></div>
+                                            <?php
+                                        }
+                                    ?>
                                     <div class="col-12">
                                         <button class="btn btn-primary" type="submit">Submit</button>
                                     </div>
@@ -151,92 +184,6 @@
         </div>
     </section>
 
-
-    <?php
-        print_r( $_SESSION );
-    ?>
-    <!-- <section class="about-me">
-        <div class="container-fluid">
-            <div class="row position-relative">
-                <div class="col-5 col-sm-5 col-md-5 col-lg-5 parent-box-left"></div>
-                <div class="col-7 col-sm-7 col-md-7 col-lg-7 parent-box-right"></div>
-                <div class="position-absolute top-0 start-0 col-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="row my-5">
-                        <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-2"></div>
-                        <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-8">
-                            <div class="row">
-                                <div class="col-0 col-sm-0 col-md-0 col-lg-1"></div>
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-10">
-                                    <div class="row my-5">
-                                        <div class="col-12 col-sm-12 col-md-6 col-lg-6 text-center child-box-left">
-                                            <div class="mx-md-2 mx-sm-5 mx-lg-5 my-5">
-                                                <div>
-                                                    <img class="rounded-circle profile-image"
-                                                        src="asset/images/images.jpeg" alt="">
-                                                </div>
-                                                <div class="text-capitalize fw-bolder fs-1 my-3 profile-name">
-                                                    <div class="profile-f-name">Arun</div>
-                                                    <div class="">Giri</div>
-                                                </div>
-                                                <div class="w-25 m-auto bg-primary rounded-pill profile-line"></div>
-                                                <div class="my-4 text-uppercase">Software Developer</div>
-                                            </div>
-                                            <div class="row bg-white text-center py-3">
-                                                <div class="col-1 col-sm-1 col-md-1 col-lg-1"></div>
-                                                <div class="col-10 col-sm-10 col-md-10 col-lg-10">
-                                                    <div class="row">
-                                                        <div class="col-2 col-sm-2 col-md-2 col-lg-2">
-                                                            <a href="#"><i class="bi bi-whatsapp"></i></a>
-                                                        </div>
-                                                        <div class="col-2 col-sm-2 col-md-2 col-lg-2">
-                                                            <a href="#"><i class="bi bi-whatsapp"></i></a>
-                                                        </div>
-                                                        <div class="col-2 col-sm-2 col-md-2 col-lg-2">
-                                                            <a href="#"><i class="bi bi-whatsapp"></i></a>
-                                                        </div>
-                                                        <div class="col-2 col-sm-2 col-md-2 col-lg-2">
-                                                            <a href="#"><i class="bi bi-whatsapp"></i></a>
-                                                        </div>
-                                                        <div class="col-2 col-sm-2 col-md-2 col-lg-2">
-                                                            <a href="#"><i class="bi bi-whatsapp"></i></a>
-                                                        </div>
-                                                        <div class="col-2 col-sm-2 col-md-2 col-lg-2">
-                                                            <a href="#"><i class="bi bi-whatsapp"></i></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-1 col-sm-1 col-md-1 col-lg-1"></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-12 col-md-6 col-lg-6 bg-white">
-                                            <div class="mx-md-2 mx-sm-5 mx-lg-5 my-5">
-                                                <h2 class="fw-bolder profile-hello">Hello</h2>
-                                                <p class="fw-bold fs-5">Here's who I am & what I do</p>
-                                                <div class="text-uppercase profile-butons mb-3">
-                                                    <a class="btn btn-outline-dark fw-bold rounded-pill my-1" href="#"
-                                                        role="button">RESUME</a>
-                                                    <a class="btn btn-outline-dark fw-bold rounded-pill my-1" href="#"
-                                                        role="button">PROJECTS</a>
-                                                </div>
-                                                <p class="fs-6">I'm a paragraph. Click here to add your own
-                                                    text and
-                                                    edit me. It's
-                                                    easy. Just click “Edit Text” or double click me to add your own
-                                                    content and make changes to the font.</p>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-0 col-sm-0 col-md-0 col-lg-1"></div>
-                            </div>
-                        </div>
-                        <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-2"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> -->
     <?php include 'include/footer.php';?>
 
 </body>
@@ -244,9 +191,10 @@
 </html>
 <?php include 'include/ajaxPopupModal.php';?>
 <?php include 'include/foot.php';?>
+<?php include '../squareImageCrop/imageCrop.php';?>
 
 <script>
   $(document).ready( function () {
-    $('#myTable').DataTable();
+    //$('#myTable').DataTable();
 } );
 </script>

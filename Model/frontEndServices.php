@@ -87,88 +87,153 @@
             return $returnArray;
         }
 
-        public function isEmailExist( $email, $userId = 0 ){
+        // Project Page Start
+        public function getProjects( $userId ){
             global $conn;
 
             $sql = "
-                SELECT user_email
-                FROM users
-                WHERE user_email = '$email'
+                SELECT p.project_id, 
+                    p.project_name, 
+                    p.user_id_fk, 
+                    p.project_site_url, 
+                    p.start_date, 
+                    p.end_date, 
+                    p.isContinue, 
+                    p.project_technologies, 
+                    p.project_tools, 
+                    p.project_description, 
+                    p.project_image, 
+                    pr.project_role_id, 
+                    pr.project_role_type
+                FROM projects AS p
+                LEFT JOIN project_roles AS pr ON pr.project_role_id = p.project_role_id_fk
+                WHERE p.user_id_fk = $userId
+                ORDER BY p.isContinue DESC,
+                    p.start_date DESC,
+                    p.end_date DESC
             ";
 
-            if( $userId > 0 ){
-                $sql .= " AND user_id != $userId ";
+            $result = mysqli_query( $conn, $sql );
+
+            $returnArray = array( 
+                "status" => false, 
+                "data" => []
+            );
+
+            if( mysqli_num_rows( $result ) > 0 ){
+                $returnArray[ "status" ] = true;
+                while( $queryResult = mysqli_fetch_assoc( $result ) ) {
+                    array_push(
+                        $returnArray[ "data" ], 
+                        array( 
+                            "projectId" => $queryResult[ "project_id" ],
+                            "projectName" => $queryResult[ "project_name" ],
+                            "userId" => $queryResult[ "user_id_fk" ],
+                            "projectSiteUrl" => $queryResult[ "project_site_url" ],
+                            "startDate" => $queryResult[ "start_date" ],
+                            "endDate" => $queryResult[ "end_date" ],
+                            "isContinue" => $queryResult[ "isContinue" ],
+                            "projectTechnologies" => $queryResult[ "project_technologies" ],
+                            "projectTools" => $queryResult[ "project_tools" ],
+                            "projectDescription" => $queryResult[ "project_description" ],
+                            "projectImage" => $queryResult[ "project_image" ],
+                            "projectRoleId" => $queryResult[ "project_role_id" ],
+                            "projectRoleType" => $queryResult[ "project_role_type" ]
+                        )
+                    );
+                }
             }
 
-            $result = mysqli_query( $conn, $sql );
+            return $returnArray;
+        }
+        // Project Page End
+
+        // Resume Page Start
+
+        // Education section start
+        public function getEducations( $userId ){
+            global $conn;
             
-            if( mysqli_num_rows( $result ) > 0 ){
-                return true;
-            } else {
-                return false;
-            }
-        } 
-
-        public function isPhoneExist( $phone, $userId = 0  ){
-            global $conn;
-
             $sql = "
-                SELECT user_phone
-                FROM users
-                WHERE user_phone = '$phone'
-            ";
-
-            if( $userId > 0 ){
-                $sql .= " AND user_id != $userId ";
-            }
-
-            $result = mysqli_query( $conn, $sql );
-
-            if( mysqli_num_rows( $result ) > 0 ){
-                return true;
-            } else {
-                return false;
-            }
-        }  
-
-        public function isUserExist( $userId ){
-            global $conn;
-
-            $sql = "
-                SELECT user_id
-                FROM users
-                WHERE user_id = $userId
+                SELECT institution_name,
+                    degree_name,
+                    start_date,
+                    end_date,
+                    isContinue,
+                    institution_address,
+                    degree_detail
+                FROM educations
+                WHERE user_id_fk = $userId
+                ORDER BY start_date DESC
             ";
 
             $result = mysqli_query( $conn, $sql );
 
-            if( mysqli_num_rows( $result ) > 0 ){
-                return true;
-            } else {
-                return false;
-            }
-        } 
+            $returnArray = array( 
+                "status" => false, 
+                "data" => []
+            );
 
-        public function getDefaultUserId( ){
+            if( mysqli_num_rows( $result ) > 0 ){
+                $returnArray[ "status" ] = true;
+                while( $queryResult = mysqli_fetch_assoc( $result ) ) {
+                    array_push(
+                        $returnArray[ "data" ], 
+                        array( 
+                            "institutionName" => $queryResult[ "institution_name" ],
+                            "degreeName" => $queryResult[ "degree_name" ],
+                            "startDate" => $queryResult[ "start_date" ],
+                            "endDate" => $queryResult[ "end_date" ],
+                            "isContinue" => $queryResult[ "isContinue" ],
+                            "institutionAddress" => $queryResult[ "institution_address" ],
+                            "degreeDetail" => $queryResult[ "degree_detail" ],
+                        )
+                    );
+                }
+            }
+
+            return $returnArray;
+        }
+        // Education section end
+
+        // skill section start
+        public function getTechnicalsSkill( $userId ){
             global $conn;
             
             $sql = "
-                SELECT user_id
-                FROM users
-                WHERE isAdmin = 1
-                AND isActive = 1
-                LIMIT 1
+                SELECT technical_skill_id,
+                    skill_name,
+                    rating_scale
+                FROM technical_skills
+                WHERE user_id_fk = $userId
+                ORDER BY rating_scale DESC
             ";
-            
+
             $result = mysqli_query( $conn, $sql );
 
-            if( mysqli_num_rows( $result ) > 0 ){
-                $queryResult = mysqli_fetch_assoc( $result );
+            $returnArray = array( 
+                "status" => false, 
+                "data" => []
+            );
 
-                return $queryResult[ "user_id" ];
-            } else {
-                return 0;
+            if( mysqli_num_rows( $result ) > 0 ){
+                $returnArray[ "status" ] = true;
+                while( $queryResult = mysqli_fetch_assoc( $result ) ) {
+                    array_push(
+                        $returnArray[ "data" ], 
+                        array( 
+                            "technicalSkillId" => $queryResult[ "technical_skill_id" ],
+                            "skillName" => $queryResult[ "skill_name" ],
+                            "ratingScale" => $queryResult[ "rating_scale" ]
+                        )
+                    );
+                }
             }
-        } 
+
+            return $returnArray;
+        }
+        // skill section end
+
+        // Resume Page End
     }
 ?>

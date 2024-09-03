@@ -1,8 +1,11 @@
 <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "myproject";
+    // Config File
+    $_config = include( $_SERVER['DOCUMENT_ROOT'] . '/myproject/private/config.php' );
+
+    $servername = $_config[ "host" ];
+    $username = $_config[ "user_name" ];
+    $password = $_config[ "password" ];
+    $dbname = $_config[ "database_name" ];
 
     // Create connection
     $conn = mysqli_connect( $servername, $username, $password, $dbname );

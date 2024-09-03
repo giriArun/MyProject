@@ -31,6 +31,15 @@
 			$pageTitle = "CONTACT";
 	        $addressData = $frontEndServices->getUserAddressDetails( $userId );
 			break;
+		case "projects.php":
+			$pageTitle = "PROJECTS";
+			$projectsData = $frontEndServices->getProjects( $userId );
+			break;
+		case "resume.php":
+			$pageTitle = "RESUME";
+			$educationsData = $frontEndServices->getEducations( $userId );
+			$technicalSkillsData = $frontEndServices->getTechnicalsSkill( $userId );
+			break;
         case "label3":
 			$pageTitle = "Home";
           	break;

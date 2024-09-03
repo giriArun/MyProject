@@ -76,8 +76,11 @@ function validateIisEmail(email) {
 }
 
 function validateAddress(name) {
-    const pattern = new RegExp('^[0-9a-zA-Z ,.:_\-]+$');
+    const pattern = /([A-Za-z0-9!@#$%^&*(){}[\];':"<>,?/|\\+\-*/=.\n ])+/g;
+    //new RegExp('([A-Za-z0-9!@#$%^&*(){}[\];\':"<>,?/|\\+\-*/=.\n ])+'); //^[0-9A-Za-z0-9&#@\n.,:;\-\_ ]+$  // ([A-Za-z0-9!@#$%^&*(){}[\];':"<>,?/|\\+\-*/=.\n ])+
     name = name.trim();
+    //var abc = /([A-Za-z0-9!@#$%^&*(){}[\];':"<>,?/|\\+\-*/=.\n ])+/g;
+    //console.log(name.length, abc.test(name));
 
     if (name.length > 0 && pattern.test(name)) {
         return true;
@@ -98,7 +101,7 @@ function validatePlace(name) {
 }
 
 function validateString(name) {
-    const pattern = new RegExp('^[0-9a-zA-Z.,-_ ]+$');
+    const pattern = new RegExp('^[0-9a-zA-Z.,-_ !@#%&]+$');
     name = name.trim();
 
     if (name.length > 0 && pattern.test(name)) {
@@ -164,7 +167,7 @@ function validatedForm(
 function logout() {
     var formData = [{ name: 'actionType', value: 'logOutSubmit' }];
 
-    ajaxCall(formData = formData, redirectUrl = "login.php");
+    ajaxCall(formData = formData, redirectUrl = rootPathAdmin + "/login.php");
 }
 
 //profile
@@ -197,7 +200,7 @@ function ajaxCall(formData, redirectUrl = '') {
     $.ajax({
         type: "POST",
         async: false,
-        url: "../model/ajaxService.php",
+        url: rootPath + "/model/ajaxService.php",
         data: formData,
         success: function (data) {
             data = JSON.parse(data);
@@ -477,7 +480,7 @@ $(function () {
                 var dataName = $(this).data('name');
                 var dataValue = $(this).val();
 
-                /* if (typeof dataType != 'undefined' && ((dataValue).trim()).length > 0) {
+                if (typeof dataType != 'undefined' && ((dataValue).trim()).length > 0) {
                     returnMessage = validatedForm(
                         data = dataValue,
                         dataType = dataType,
@@ -492,19 +495,115 @@ $(function () {
                         $('div.valid-feedback, div.invalid-feedback', '.' + this.id).addClass('d-none');
                         $('div.invalid-js-message', '.' + this.id).css('display', 'block').html(returnMessage);
                     }
-                } */
+                }
             });
 
             if (isAjaxCall) {
                 var formData = $(this).serializeArray();
                 formData.push({ name: 'actionType', value: 'addEditProject' });
 
-                ajaxCall(formData = formData, redirectUrl = "");//projects.php
+                ajaxCall(formData = formData, redirectUrl = "projects.php");
             }
 
         });
 
         $('#continueProject').click(function () {
+            $('#validationEndDate').attr('disabled', $(this).is(':checked'));
+        });
+
+        $('.addEditProject .form-control').on("keyup", function (e) {
+            if ($('div.valid-feedback, div.invalid-feedback', '.' + this.id).hasClass('d-none')) {
+                $('div.valid-feedback, div.invalid-feedback', '.' + this.id).removeClass('d-none');
+                $('div.invalid-js-message', '.' + this.id).css('display', 'none');
+            }
+        });
+    } else if (document.body.classList.contains('addEditTechnicalSkill')) {    // Add Edit Technical Skill
+        $("form[ name = 'form_addEditTechnicalSkill' ]").submit(function (e) {
+            e.preventDefault();
+            var returnMessage = "";
+            var isAjaxCall = true;
+
+            $(this.elements).each(function (e) {
+                var minLength = $(this).attr('minlength');
+                var maxLength = $(this).attr('maxlength');
+                var dataType = $(this).data('type');
+                var dataName = $(this).data('name');
+                var dataValue = $(this).val();
+
+                if (typeof dataType != 'undefined' && ((dataValue).trim()).length > 0) {
+                    returnMessage = validatedForm(
+                        data = dataValue,
+                        dataType = dataType,
+                        dataName = dataName,
+                        minLength = minLength,
+                        maxLength = maxLength
+                    );
+
+                    if (returnMessage != "") {
+                        isAjaxCall = false;
+                        this.focus();
+                        $('div.valid-feedback, div.invalid-feedback', '.' + this.id).addClass('d-none');
+                        $('div.invalid-js-message', '.' + this.id).css('display', 'block').html(returnMessage);
+                    }
+                }
+            });
+
+            if (isAjaxCall) {
+                var formData = $(this).serializeArray();
+                formData.push({ name: 'actionType', value: 'technicalSkillSubmit' });
+
+                ajaxCall(formData = formData, redirectUrl = "skills.php");
+            }
+
+        });
+
+        $('.addEditProject .form-control').on("keyup", function (e) {
+            if ($('div.valid-feedback, div.invalid-feedback', '.' + this.id).hasClass('d-none')) {
+                $('div.valid-feedback, div.invalid-feedback', '.' + this.id).removeClass('d-none');
+                $('div.invalid-js-message', '.' + this.id).css('display', 'none');
+            }
+        });
+    } else if (document.body.classList.contains('addEditEducation')) {    // Add Edit Education
+        $("form[ name = 'form_addEditEducation' ]").submit(function (e) {
+            e.preventDefault();
+            var returnMessage = "";
+            var isAjaxCall = true;
+
+            $(this.elements).each(function (e) {
+                var minLength = $(this).attr('minlength');
+                var maxLength = $(this).attr('maxlength');
+                var dataType = $(this).data('type');
+                var dataName = $(this).data('name');
+                var dataValue = $(this).val();
+
+                if (typeof dataType != 'undefined' && ((dataValue).trim()).length > 0) {
+                    returnMessage = validatedForm(
+                        data = dataValue,
+                        dataType = dataType,
+                        dataName = dataName,
+                        minLength = minLength,
+                        maxLength = maxLength
+                    );
+
+                    if (returnMessage != "") {
+                        isAjaxCall = false;
+                        this.focus();
+                        $('div.valid-feedback, div.invalid-feedback', '.' + this.id).addClass('d-none');
+                        $('div.invalid-js-message', '.' + this.id).css('display', 'block').html(returnMessage);
+                    }
+                }
+            });
+
+            if (isAjaxCall) {
+                var formData = $(this).serializeArray();
+                formData.push({ name: 'actionType', value: 'addEditEducationSubmit' });
+
+                ajaxCall(formData = formData, redirectUrl = rootPathAdmin + "/education/education.php");
+            }
+
+        });
+
+        $('#continueDegree').click(function () {
             $('#validationEndDate').attr('disabled', $(this).is(':checked'));
         });
 

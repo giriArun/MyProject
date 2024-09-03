@@ -8,7 +8,7 @@
             $createdBy
         ){
             $sql = "
-                INSERT INTO password (
+                INSERT INTO passwords (
                     user_id_fk, 
                     password_hash, 
                     isOneTime,
@@ -39,7 +39,7 @@
             $sql = "
                 SELECT password_id,
                     isOneTime
-                FROM password
+                FROM passwords
                 WHERE user_id_fk = $userId
                 AND password_hash = '$passwordHash'
                 AND isOneTime < 2

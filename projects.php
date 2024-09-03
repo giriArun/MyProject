@@ -35,7 +35,7 @@
 <body>
 
     <?php include 'include/header.php';?>
-
+    
     <section class="projects">
         <div class="container-fluid">
             <div class="row parent-box py-5">
@@ -61,58 +61,51 @@
                                 <div class="col-0 col-sm-0 col-md-1 col-lg-1"></div>
                             </div>
                             <div class="row">
-                                <div class="col-12 bg-white mt-4 mb-5 shadow">
-                                    <div class="row">
-                                        <div class="col-12 col-sm-12 col-md-7 col-lg-7 py-5 px-5 position-relative">
-                                            <div class="bg-primary position-absolute top-0 start-0 my-5 pt-5 pb-4 px-2">
-                                            </div>
-                                            <div class="text-primary fw-bold fs-4">
-                                                Project name 01
-                                                <a href="#"><i class="bi bi-link-45deg"></i></a>
-                                            </div>
-                                            <div class="fs-5">Role Title</div>
-                                            <div class="fs-6 mt-3">
-                                                I'm a paragraph. Click here to add your own text and
-                                                edit me. It’s easy. Just click “Edit Text” or double click me to add
-                                                your own content and make changes to the font. I’m a great place for you
-                                                to tell a story and let your users know a little more about you.
-                                                I'm a paragraph. Click here to add your own text and edit me. It’s easy.
-                                                Just click “Edit Text” or double click me to add your own content and
-                                                make changes to the font. I’m a great place for you to tell a story and
-                                                let your users know a little more about you.
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-12 col-md-5 col-lg-5 px-0">
-                                            <img src="asset/images/testImage.jpg"
-                                                class="img-fluid height-webkit-fill-available">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 bg-white mt-4 mb-5 shadow">
-                                    <div class="row">
-                                        <div class="col-12 col-sm-12 col-md-7 col-lg-7 py-5 px-5 position-relative">
-                                            <div class="bg-primary position-absolute top-0 start-0 my-5 pt-5 pb-4 px-2">
-                                            </div>
-                                            <div class="text-primary fw-bold fs-4">Project name 01<a href="#"><i
-                                                        class="bi bi-link-45deg"></i></a></div>
-                                            <div class="fs-5">Role Title</div>
-                                            <div class="fs-6 mt-3">
-                                                I'm a paragraph. Click here to add your own text and
-                                                edit me. It’s easy. Just click “Edit Text” or double click me to add
-                                                your own content and make changes to the font. I’m a great place for you
-                                                to tell a story and let your users know a little more about you.
-                                                I'm a paragraph. Click here to add your own text and edit me. It’s easy.
-                                                Just click “Edit Text” or double click me to add your own content and
-                                                make changes to the font. I’m a great place for you to tell a story and
-                                                let your users know a little more about you.
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-12 col-md-5 col-lg-5 px-0">
-                                            <img src="asset/images/testImage.jpg"
-                                                class="img-fluid height-webkit-fill-available">
-                                        </div>
-                                    </div>
-                                </div>
+                                <?php
+                                    if( $projectsData[ "status" ] ){
+                                        foreach( $projectsData[ "data" ] as $projectData ){
+                                            ?>
+                                                <div class="col-12 bg-white mt-4 mb-5 shadow">
+                                                    <div class="row">
+                                                        <div class="col-12 col-sm-12 col-md-7 col-lg-7 py-5 px-5 position-relative">
+                                                            <div class="bg-primary position-absolute top-0 start-0 my-5 py-5 px-2">
+                                                            </div>
+                                                            <div class="text-primary fw-bold fs-4">
+                                                                <?=$projectData[ "projectName" ];?>
+                                                                <?php
+                                                                    if( strlen( trim( $projectData[ "projectSiteUrl" ] ) ) > 0 ){
+                                                                        ?>
+                                                                            <a href="<?=$projectData[ "projectSiteUrl" ];?>" target="_blank" title="Project Link"><i class="bi bi-link-45deg"></i></a>
+                                                                        <?php
+                                                                    }
+                                                                ?>
+                                                            </div>
+                                                            <div class="fs-5"><?=$projectData[ "projectRoleType" ];?></div>
+                                                            <div class="lh-1 text-muted fw-light">
+                                                                <?php
+                                                                    $startDate = date_format( date_create( $projectData[ "startDate" ] ), "M Y" );
+                                                                    $endDate = $projectData[ "isContinue" ] ? "Present" : date_format( date_create( $projectData[ "endDate" ] ), "M Y" );
+
+                                                                    echo $startDate . " - " . $endDate;
+                                                                ?>
+                                                            </div>
+                                                            <div class="p-2"></div>
+                                                            <div class="fs-6 mt-2 fw-normal"><?=$projectData[ 'projectTechnologies' ];?></div>
+                                                            <div class="fs-6 mt-2 fw-normal"><?=$projectData[ 'projectTools' ];?></div>
+                                                            <div class="fs-6 mt-2 fw-normal"><?=htmlspecialchars_decode( $projectData[ 'projectDescription' ] );?></div>
+                                                        </div>
+                                                        <div class="col-12 col-sm-12 col-md-5 col-lg-5 px-0">
+                                                            <img src="asset/images/uploadImages/<?=$projectData[ "projectImage" ];?>"
+                                                                class="img-fluid height-webkit-fill-available"
+                                                                alt="map image"
+                                                                onerror="this.onerror=null; this.src='asset/images/icon/project.png'">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php
+                                        }
+                                    }
+                                ?>
                             </div>
                         </div>
                         <div class="col-0 col-sm-0 col-md-0 col-lg-1"></div>

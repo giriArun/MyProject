@@ -134,7 +134,7 @@
                     project_name,
                     project_site_url,
                     project_role_id_fk,
-                    strat_date,
+                    start_date,
                     $endDateFiled
                     isContinue,
                     project_technologies,
@@ -191,7 +191,7 @@
                 SET project_name = '$projectName',
                     project_site_url = '$projectUrl',
                     project_role_id_fk = $roleTypeId,
-                    strat_date = '$startDate',
+                    start_date = '$startDate',
                     $endDateFiled
                     isContinue = $continueProject,
                     project_technologies = '$technologies',
@@ -215,7 +215,8 @@
 
         public function getProjects( 
             $userId = 0, 
-            $projectId = 0 
+            $projectId = 0,
+            $isProjectId = 0
         ){
             global $conn;
 
@@ -226,7 +227,7 @@
                     p.project_name, 
                     p.user_id_fk, 
                     p.project_site_url, 
-                    p.strat_date, 
+                    p.start_date, 
                     p.end_date, 
                     p.isContinue, 
                     p.project_technologies, 
@@ -240,7 +241,7 @@
                 WHERE p.user_id_fk = $userId
             ";
 
-            if( $projectId > 0 ){
+            if( $projectId > 0 || $isProjectId == 1 ){
                 $sql .= "
                     AND p.project_id = $projectId
                 ";
@@ -263,7 +264,7 @@
                             "projectName" => $queryResult[ "project_name" ],
                             "userId" => $queryResult[ "user_id_fk" ],
                             "projectSiteUrl" => $queryResult[ "project_site_url" ],
-                            "stratDate" => $queryResult[ "strat_date" ],
+                            "startDate" => $queryResult[ "start_date" ],
                             "endDate" => $queryResult[ "end_date" ],
                             "isContinue" => $queryResult[ "isContinue" ],
                             "projectTechnologies" => $queryResult[ "project_technologies" ],

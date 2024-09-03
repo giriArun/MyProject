@@ -17,17 +17,19 @@
                     </li>
                     <?php
                         if( $_SESSION[ "isAdmin" ] == 1 ){
-                            $aboutMeActive = in_array( $parentClass, 
-                                array( "projects", "addEditProjectRole", "addEditProject" ) 
-                            ) ? 'active' : '';
+                            $educationActive = in_array( $parentClass, array( "education", "addEditEducation" ) ) ? 'active' : '';
                             $projectsActive = in_array( $parentClass, array( "projects", "addEditProjectRole", "addEditProject" ) ) ? 'active' : '';
+                            $skillsActive = in_array( $parentClass, array( "skills", "addEditTechnicalSkill", "" ) ) ? 'active' : '';
+                            $aboutMeActive = ( $educationActive == '' && $projectsActive == '' && $skillsActive == '' ) ? '' : 'active';
                             ?>
                                 <li class="nav-item dropdown text-uppercase">
                                     <a class="nav-link dropdown-toggle <?=$aboutMeActive;?>" href="#" id="aboutMeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         About Me
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="aboutMeDropdown">
-                                        <li><a class="dropdown-item <?=$projectsActive;?>" href="projects.php">Projects</a></li>
+                                        <li><a class="dropdown-item <?=$educationActive;?>" href="<?=$_config[ "root_path_admin" ];?>/education/education.php">Education</a></li>
+                                        <li><a class="dropdown-item <?=$projectsActive;?>" href="<?=$_config[ "root_path_admin" ];?>/projects.php">Projects</a></li>
+                                        <li><a class="dropdown-item <?=$skillsActive;?>" href="<?=$_config[ "root_path_admin" ];?>/skills.php">Skills</a></li>
                                         <li><a class="dropdown-item" href="#">Link 2</a></li>
                                         <li>
                                             <hr class="dropdown-divider">
@@ -63,7 +65,7 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li>
-                                <a class="dropdown-item <?=( strtolower( $pageTitle ) == 'profile' ? 'active' : '' );?>" href="profile.php">
+                                <a class="dropdown-item <?=( strtolower( $pageTitle ) == 'profile' ? 'active' : '' );?>" href="<?=$_config[ "root_path_admin" ];?>/profile.php">
                                     Profile
                                 </a>
                             </li>
