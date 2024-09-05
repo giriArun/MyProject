@@ -1,19 +1,19 @@
 <?php
     include( $_SERVER['DOCUMENT_ROOT'] . '/myproject/model/dbConnection.php' );
 
-	require_once $_config[ "absolute_path" ] . '/include/global.php';
+	require_once $_config[ "absolute_path" ] . '/myInfo/include/global.php';
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <?php include $_config[ "absolute_path" ] . '/include/head.php';?>
+        <?php include $_config[ "absolute_path" ] . '/myInfo/include/head.php';?>
     </head>
 
     <body>
 
         <?php
-            include $_config[ "absolute_path" ] . '/include/header.php';
+            include $_config[ "absolute_path" ] . '/myInfo/include/header.php';
 
             switch( $action ){
                 case "contact":
@@ -29,7 +29,7 @@
                     include $_config[ "absolute_path" ] . '/myInfo/aboutMe.php';
             }
             
-            include $_config[ "absolute_path" ] . '/include/footer.php';
+            include $_config[ "absolute_path" ] . '/myInfo/include/footer.php';
         ?>
     
     </body>
