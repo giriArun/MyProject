@@ -2,7 +2,7 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-white px-4 fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand fs-3" href="<?=$_config[ "root_path" ];?>/index.php">
+            <a class="navbar-brand fs-3" href="<?=$_config[ "root_path" ];?>/">
                 <i class="bi bi-square-fill text-primary fs-4"></i>
                 <span class="fw-bold"><?=$headerFooterData[ "userFirstName" ];?> <?=$headerFooterData[ "userLastName" ];?></span>
                 <span class="d-none d-sm-inline-block"> / Software Developer</span>
@@ -15,16 +15,16 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fs-6 text-start">
                     <li class="nav-item">
-                        <a class="nav-link <?=$fileName == "index.php" ? "active text-primary" : "";?>" aria-current="page" href="<?=$_config[ "root_path" ];?>/index.php">ABOUT ME</a>
+                        <a class="nav-link <?=$action == "" ? "active text-primary" : "";?>" aria-current="page" href="<?=$_config[ "root_path" ];?>/">ABOUT ME</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?=$fileName == "resume.php" ? "active text-primary" : "";?>" href="<?=$_config[ "root_path" ];?>/resume.php">RESUME</a>
+                        <a class="nav-link <?=$action == "resume" ? "active text-primary" : "";?>" href="<?=$_config[ "root_path" ];?>/?action=resume">RESUME</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?=$fileName == "projects.php" ? "active text-primary" : "";?>" href="<?=$_config[ "root_path" ];?>/projects.php">PROJECTS</a>
+                        <a class="nav-link <?=$action == "projects" ? "active text-primary" : "";?>" href="<?=$_config[ "root_path" ];?>/?action=projects">PROJECTS</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?=$fileName == "contact.php" ? "active text-primary" : "";?>" href="<?=$_config[ "root_path" ];?>/contact.php">CONTACT</a>
+                        <a class="nav-link <?=$action == "contact" ? "active text-primary" : "";?>" href="<?=$_config[ "root_path" ];?>/?action=contact">CONTACT</a>
                     </li>
                 </ul>
             </div>
