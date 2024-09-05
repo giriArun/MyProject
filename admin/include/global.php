@@ -17,6 +17,7 @@
     
     require_once $_config[ "absolute_path" ] . '/model/addressService.php';
     require_once $_config[ "absolute_path" ] . '/model/educationService.php';
+    require_once $_config[ "absolute_path" ] . '/model/familyService.php';
     require_once $_config[ "absolute_path" ] . '/model/projectService.php';
     require_once $_config[ "absolute_path" ] . '/model/skillService.php';
     require_once $_config[ "absolute_path" ] . '/model/usersService.php';
@@ -153,7 +154,7 @@
                 $technicalSkillData = $skillService->getTechnicalSkill( $skillId = $id );
             }
             break;
-        case 'education.php': case 'addediteducation.php':
+        case 'education.php': case 'addediteducation.php':  // Education Page
             if( $_SESSION[ "isAdmin" ] != 1 ){
                 $validateService->redirectToHome( $_config[ "root_path_admin" ] );
             }
@@ -185,8 +186,29 @@
                 }
             }
             break;
-        case '11_addedittechnicalskill.php':
-            $skillService = new skillService( );
+        case 'family.php': case 'addeditfamily.php':  // Family Page
+            if( $_SESSION[ "isAdmin" ] != 1 ){
+                $validateService->redirectToHome( $_config[ "root_path_admin" ] );
+            }
+
+            $familyService = new familyService( );
+            $pageTitle = "Family";
+
+            if( $fileName == "family.php" ){
+                $parentClass = "family";
+                $familyData = $familyService->getFamily( $familyId = 0 );
+            } else if( $fileName == "addeditfamily.php" ){
+                $parentClass = "addEditFamily";
+                
+                if( $id > 0 ){
+                    $pageTitle = "Edit " . $pageTitle;
+                    $familyData = $educationService->getEdication( $educationId = $id );
+                } else {
+                    $pageTitle = "Add " . $pageTitle;
+                    $familyData = [ ];
+                }
+            }
+            /* $skillService = new skillService( );
 
             $pageTitle = 'Add Edit Technical Skill';
             $parentClass = "addEditTechnicalSkill";
@@ -194,7 +216,7 @@
             
             if( $id > 0 ){
                 $technicalSkillData = $skillService->getTechnicalSkill( $skillId = $id );
-            }
+            } */
             break;
         case 'label3':
             $pageTitle = 'SignUp';

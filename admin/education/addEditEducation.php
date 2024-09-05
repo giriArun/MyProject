@@ -111,7 +111,10 @@
             </div>
         </div>
     </section>
-
+    <pre>
+        :::Note:::
+        check JS validation. maybe has issue
+    </pre>
     <?php include $_config[ "absolute_path_admin" ] . '/include/footer.php';?>
 
 </body>

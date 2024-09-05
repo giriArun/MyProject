@@ -1,6 +1,6 @@
 
 <title><?=$pageTitle;?></title>
-<link rel="icon" type="image/png" sizes="32x32" href="asset/images/icon/favicon-32x32.png">
+<link rel="icon" type="image/x-icon" href="<?=$_config[ "root_path" ];?>/asset/images/icon/favicon_1.ico">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -9,7 +9,7 @@
 
 
 <!-- Custom css -->
-<link href="asset/css/profile.css" rel="stylesheet">
+<link href="<?=$_config[ "root_path" ];?>/asset/css/profile.css" rel="stylesheet">
 
 
 <!-- google font -->

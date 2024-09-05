@@ -614,6 +614,14 @@ $(function () {
             }
         });
     }
+
+    // DataTable
+    $('#data_table').DataTable(
+        {
+            columnDefs: [{ orderable: false, targets: -1 }],
+            scrollX: true
+        }
+    );
 });
 
 

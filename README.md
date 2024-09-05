@@ -36,3 +36,9 @@ https://www.wix.com/website-template/view/html/2622?originUrl=https%3A%2F%2Fwww.
 [technical_skill_id],[user_id_fk],[skill_name],[rating_scale],[created_on],[created_by],[modified_on],[modified_by]
 :::educations:::
 [education_id],[institution_name],[degree_name],[start_date],[end_date],[isContinue],[institution_address],[degree_detail],[created_on],[created_by],[modified_on],[modified_by]
+
+
+
+TODO:
+1. URL like my previous project(like: index.php?action=project)
+first move the CV page, then move the admin page

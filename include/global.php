@@ -4,10 +4,10 @@
     $fileNameArray = explode( "/", $filePath );
     $fileName = end( $fileNameArray );
 
- 
-    include 'model/dbConnection.php';
-	require_once 'model/usersService.php';
-	require_once 'model/frontEndServices.php';
+	include( $_SERVER['DOCUMENT_ROOT'] . '/myproject/model/dbConnection.php' );
+    
+	require_once $_config[ "absolute_path" ] . '/model/usersService.php';
+	require_once $_config[ "absolute_path" ] . '/model/frontEndServices.php';
 
 
 	$usersService = new usersService( );
