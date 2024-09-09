@@ -1,39 +1,25 @@
 <?php
-    // Config File
-    //$_config = include( $_SERVER['DOCUMENT_ROOT'] . '/myproject/private/config.php' );
-
     //Session start
     if(session_id( ) == '' || !isset( $_SESSION ) || session_status( ) === PHP_SESSION_NONE) {
         // session isn't started
         session_start( );
     }
-
-    // Get File path & name
-    $filePath = $_SERVER[ 'PHP_SELF' ];
-    $fileNameArray = explode( "/", $filePath );
-    $fileName = end( $fileNameArray );
-
-    include( $_SERVER['DOCUMENT_ROOT'] . '/myproject/model/dbConnection.php' );
     
-    require_once $_config[ "absolute_path" ] . '/model/addressService.php';
-    require_once $_config[ "absolute_path" ] . '/model/educationService.php';
     require_once $_config[ "absolute_path" ] . '/model/familyService.php';
-    require_once $_config[ "absolute_path" ] . '/model/projectService.php';
-    require_once $_config[ "absolute_path" ] . '/model/skillService.php';
     require_once $_config[ "absolute_path" ] . '/model/usersService.php';
-    require_once $_config[ "absolute_path" ] . '/model/validateService.php';
 
     $usersService = new usersService( );
 
-    //redirect function start
-    $validateService = new validateService( );
-    
-    //redirect function end
+    $action = array_key_exists( "action", $_GET ) ? strtolower( $_GET[ "action" ] ) : "dashboard";
+    $id = isset( $_GET[ 'id' ] ) ? intval( $_GET[ 'id' ] ) : 0;
 
+    $customBodyClass = "";
+    $includeFileList = "test,data,table";
+    
     //session_unset();
     if( isset( $_SESSION[ 'userId' ] ) && $_SESSION[ 'userId' ] > 0 ){
-        if( strtolower( $fileName ) == 'signup.php' || strtolower( $fileName ) == 'login.php' ){
-            header( "Location: " . $_config[ "root_path_admin" ] . "/index.php" );
+        if( $action == 'signup' || $action == 'login' ){
+            $action = "dashboard";
         }
 
         if( !isset( $_SESSION[ 'userFirstName' ] ) || strlen( trim( $_SESSION[ 'userFirstName' ] ) ) == 0 ){
@@ -44,31 +30,99 @@
                 $_SESSION[ 'userLastName' ] = $userData[ "userLastName" ];
             } else {
                 // remove all session variables
-                session_unset();
-                header( "Location: " . $_config[ "root_path_admin" ] . "/login.php" );
+                session_unset( );
+                $action = 'login';
             }
         }
     } else {
         // remove all session variables
         session_unset();
 
-        if( strtolower( $fileName ) != 'signup.php' && strtolower( $fileName ) != 'login.php' ){
-            header( "Location: " . $_config[ "root_path_admin" ] . "/login.php" );
+        if( $action != 'signup' && $action != 'login' ){
+            $action = 'login';
         }
     }
 
-    $id = isset( $_GET[ 'id' ] ) ? intval( $_GET[ 'id' ] ) : 0;
+
+    switch( $action ){
+        case "login":
+            $pageTitle = "LogIn";
+            $customBodyClass = "background-color-bone";
+            break;
+        case "signup":
+            $pageTitle = "SignUp";
+            $customBodyClass = "background-color-bone";
+            break;
+        case "family": case 'addeditfamily':
+            if( $_SESSION[ "isAdmin" ] != 1 ){
+                $validateService->redirectToHome( $_config[ "root_path_admin" ] );
+            }
+
+            $familyService = new familyService( );
+            $pageTitle = "Family";
+
+            if( $action == "family" ){
+                $familyData = $familyService->getFamily( $familyId = 0 );
+            } else if( $action == "addeditfamily" ){
+                $parentsData = $familyService->getParents( $familyId = $id );
+                $spousesData = $familyService->getSpouses( $familyId = $id );
+                
+                if( $id > 0 ){
+                    $pageTitle = "Edit " . $pageTitle;
+                    $familyData = $familyService->getFamily( $familyId = $id );
+                    
+                } else {
+                    $pageTitle = "Add " . $pageTitle;
+                    $familyData = [ ];
+                }
+            }
+            break;
+        case "projects":
+            $pageTitle = "PROJECTS";
+            $projectsData = $frontEndServices->getProjects( $userId );
+            break;
+        case "resume":
+            $pageTitle = "RESUME";
+            $educationsData = $frontEndServices->getEducations( $userId );
+            $technicalSkillsData = $frontEndServices->getTechnicalsSkill( $userId );
+            break;
+        default:
+            $pageTitle = "ABOUT ME";
+            $action = "";
+    }
+/*
+case 'family.php': case 'addeditfamily.php':  // Family Page
+            */
+
+
+
+    if( array_key_exists( "action", $_GET ) || 1==1 ){
+    } else {
+    // Config File
+    //$_config = include( $_SERVER['DOCUMENT_ROOT'] . '/myproject/private/config.php' );
+
+
+
+    include( $_SERVER['DOCUMENT_ROOT'] . '/myproject/model/dbConnection.php' );
+    
+    require_once $_config[ "absolute_path" ] . '/model/addressService.php';
+    require_once $_config[ "absolute_path" ] . '/model/educationService.php';
+    
+    require_once $_config[ "absolute_path" ] . '/model/projectService.php';
+    require_once $_config[ "absolute_path" ] . '/model/skillService.php';
+    
+    require_once $_config[ "absolute_path" ] . '/model/validateService.php';
+
+
+
+    //redirect function start
+    $validateService = new validateService( );
+    
+    //redirect function end
+
     $fileName = strtolower( $fileName );
 
     switch ( $fileName ) {
-        case 'signup.php':
-            $pageTitle = 'SignUp';
-            $parentClass = "signUp";
-            break;
-        case 'login.php':
-            $pageTitle = 'LogIn';
-            $parentClass = "logIn";
-            break;
         case 'index.php':
             $pageTitle = 'Index';
             $parentClass = "index";
@@ -186,52 +240,10 @@
                 }
             }
             break;
-        case 'family.php': case 'addeditfamily.php':  // Family Page
-            if( $_SESSION[ "isAdmin" ] != 1 ){
-                $validateService->redirectToHome( $_config[ "root_path_admin" ] );
-            }
-
-            $familyService = new familyService( );
-            $pageTitle = "Family";
-
-            if( $fileName == "family.php" ){
-                $parentClass = "family";
-                $familyData = $familyService->getFamily( $familyId = 0 );
-            } else if( $fileName == "addeditfamily.php" ){
-                $parentClass = "addEditFamily";
-                
-                if( $id > 0 ){
-                    $pageTitle = "Edit " . $pageTitle;
-                    $familyData = $educationService->getEdication( $educationId = $id );
-                } else {
-                    $pageTitle = "Add " . $pageTitle;
-                    $familyData = [ ];
-                }
-            }
-            /* $skillService = new skillService( );
-
-            $pageTitle = 'Add Edit Technical Skill';
-            $parentClass = "addEditTechnicalSkill";
-            $technicalSkillData = [ ];
-            
-            if( $id > 0 ){
-                $technicalSkillData = $skillService->getTechnicalSkill( $skillId = $id );
-            } */
-            break;
-        case 'label3':
-            $pageTitle = 'SignUp';
-            $parentClass = "home";
-            break;
         default:
             $pageTitle = 'Home';
             $parentClass = "home";
       }
 
-   /*  print_r($pageTitle);
-    print_r($_SERVER);
-
-    $pizza  = "piece1 piece2 piece3 piece4 piece5 piece6";
-$pieces = explode(" ", $pizza);
-
-print_r( $pieces ); */
+    }
 ?>

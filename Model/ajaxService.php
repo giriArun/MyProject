@@ -4,6 +4,7 @@
 
     require_once $_config[ "absolute_path" ] . '/model/addressService.php';
     require_once $_config[ "absolute_path" ] . '/model/educationService.php';
+    require_once $_config[ "absolute_path" ] . '/model/familyService.php';
     require_once $_config[ "absolute_path" ] . '/model/passwordService.php';
     require_once $_config[ "absolute_path" ] . '/model/projectService.php';
     require_once $_config[ "absolute_path" ] . '/model/skillService.php';
@@ -703,6 +704,109 @@
             }
         }
     }
+    
+    function addEditFamilySubmit( $postData ){
+        $familyId = $postData['familyId'];
+        $name = $postData['name'];
+        $gender = $postData['gender'];
+        $sequence = $postData['sequence'];
+        $nickName = $postData['nickName'];
+        $dob = $postData['dob'];
+        $dod = $postData['dod'];
+        $parentId = $postData['parentId'];
+        $spouseId = $postData['spouseId'];
+        $isRoot = isset($_POST['isRoot']) ? 1 : 0;
+
+        if( $isRoot == 1 ){
+            $parentId = 0;
+        }
+
+        $familyId = is_numeric($familyId)? $familyId : 0;
+        
+        $message = [];
+        $familyService = new familyService( );
+        global $validateService;
+
+        //Validate User fields
+        if( !$validateService->validateString($name) ){
+            array_push($message,"Please enter a valid Name.");
+        } elseif( !$validateService->validateStringLength( $string = $name, $maxLength = 200, $minLength = 1) ){
+            array_push($message,"Please enter a Name within 200 characters.");
+        }
+
+        if( !$validateService->validateString($gender) ){
+            array_push($message,"Please enter a valid Gender.");
+        } elseif( !$validateService->validateStringLength( $string = $gender, $maxLength = 10, $minLength = 1) ){
+            array_push($message,"Please enter a Gender within 10 characters.");
+        }
+
+        if( $nickName != "" && !$validateService->validateString($nickName) ){
+            array_push($message,"Please enter a valid NickName.");
+        } elseif( !$validateService->validateStringLength( $nickName = $gender, $maxLength = 50, $minLength = 1) ){
+            array_push($message,"Please enter a NickName within 50 characters.");
+        }
+
+        if( !$validateService->validateDate($dob) ){
+            array_push($message,"Please enter a valid Date Of Birth.");
+        }
+
+        if( !$validateService->validateDate($dod) ){
+            array_push($message,"Please enter a valid Date Of Death.");
+        }
+    
+        if($sequence == "" || !$validateService->validateNumber($sequence)){
+            array_push($message,"Please enter a valid Sequence.");
+        }
+    
+        if($spouseId === "" || !$validateService->validateNumber($spouseId)){
+            array_push($message,"Please enter a valid Spouse.");
+        }
+
+        if( $parentId === "" || !$validateService->validateNumber($parentId)){
+            array_push($message,"Please enter a valid Parent.");
+        }
+
+        if(count($message)){
+            return array("status" => false, "message" => $message, "data" => '');
+        } else {
+            if( $familyId > 0 ){
+                $familyLastId = $familyService->updateFamily(
+                    $familyId = $familyId,
+                    $name = $name,
+                    $gender = $gender,
+                    $sequence = $sequence,
+                    $nickName = $nickName,
+                    $dob = $dob,
+                    $dod = $dod,
+                    $parentId = $parentId,
+                    $spouseId = $spouseId,
+                    $isRoot = $isRoot
+                );
+            } else {
+                $familyLastId = $familyService->insertFamily(
+                    $name = $name,
+                    $gender = $gender,
+                    $sequence = $sequence,
+                    $nickName = $nickName,
+                    $dob = $dob,
+                    $dod = $dod,
+                    $parentId = $parentId,
+                    $spouseId = $spouseId,
+                    $isRoot = $isRoot
+                );
+            }
+    
+            if( $familyLastId > 0 ){
+                array_push($message,"Family details update successfully.");
+
+                return array( "status" => true, "message" => $message, "data" => '' );
+            } else {
+                array_push($message,"Family details update failed.");
+
+                return array("status" => false, "message" => $message, "data" => '');
+            }
+        }
+    }
 
 
     if (array_key_exists("actionType",$_POST)){
@@ -730,6 +834,9 @@
                 break;
             case "addEditEducationSubmit":
                 print json_encode( addEditEducationSubmit( $_POST ) );
+                break;
+            case "addEditFamilySubmit":
+                print json_encode( addEditFamilySubmit( $_POST ) );
                 break;
             default:
                 print json_encode([]);

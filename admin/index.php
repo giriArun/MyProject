@@ -1,186 +1,65 @@
-<?php include 'include/global.php';?>
+<?php
+    include( $_SERVER['DOCUMENT_ROOT'] . '/myproject/model/dbConnection.php' );
+
+    require_once $_config[ "absolute_path_admin" ] . '/include/global.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <?php include $_config[ "absolute_path_admin" ] . '/include/head.php';?>
+    </head>
 
-<head>
-    <?php include 'include/head.php';?>
-</head>
+    <body class="<?=$customBodyClass;?> <?=$action;?>">
 
-<body class="<?=$pageTitle;?>">
-    <?php include 'include/header.php';?>
+        <?php
+            if( !in_array( $action, array( "login", "signup" ) ) ){
+                include $_config[ "absolute_path_admin" ] . '/include/header.php';
+            }
 
+            switch( $action ){
+                case "login":
+                    include $_config[ "absolute_path_admin" ] . '/registration/login.php';
+                    break;
+                case "signup":
+                    include $_config[ "absolute_path_admin" ] . '/registration/signup.php';
+                    break;
+                case "family":
+                    include $_config[ "absolute_path_admin" ] . '/family/family.php';
+                    break;
+                case "addeditfamily":
+                    include $_config[ "absolute_path_admin" ] . '/family/addEditFamily.php';
+                    break;
+                case "resume":
+                    include $_config[ "absolute_path_admin" ] . '/myInfo/resume.php';
+                    break;
+                default:
+                    include $_config[ "absolute_path_admin" ] . '/myInfo/aboutMe.php';
+            }
 
-    <section class="mt-5 pt-2">
-        <div class="container-fluid">
-            <div class="row background-color-bone">
-                <div class="col-1"></div>
-                <div class="col-10 my-5">hello world</div>
-                <div class="col-1"></div>
-            </div>
-        </div>
-    </section>
-
-    <?php
-        print_r( $_SESSION );
-    ?>
-    <!-- <section class="about-me">
-        <div class="container-fluid">
-            <div class="row position-relative">
-                <div class="col-5 col-sm-5 col-md-5 col-lg-5 parent-box-left"></div>
-                <div class="col-7 col-sm-7 col-md-7 col-lg-7 parent-box-right"></div>
-                <div class="position-absolute top-0 start-0 col-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="row my-5">
-                        <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-2"></div>
-                        <div class="col-10 col-sm-10 col-md-10 col-lg-10 col-xl-8">
-                            <div class="row">
-                                <div class="col-0 col-sm-0 col-md-0 col-lg-1"></div>
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-10">
-                                    <div class="row my-5">
-                                        <div class="col-12 col-sm-12 col-md-6 col-lg-6 text-center child-box-left">
-                                            <div class="mx-md-2 mx-sm-5 mx-lg-5 my-5">
-                                                <div>
-                                                    <img class="rounded-circle profile-image"
-                                                        src="asset/images/images.jpeg" alt="">
-                                                </div>
-                                                <div class="text-capitalize fw-bolder fs-1 my-3 profile-name">
-                                                    <div class="profile-f-name">Arun</div>
-                                                    <div class="">Giri</div>
-                                                </div>
-                                                <div class="w-25 m-auto bg-primary rounded-pill profile-line"></div>
-                                                <div class="my-4 text-uppercase">Software Developer</div>
-                                            </div>
-                                            <div class="row bg-white text-center py-3">
-                                                <div class="col-1 col-sm-1 col-md-1 col-lg-1"></div>
-                                                <div class="col-10 col-sm-10 col-md-10 col-lg-10">
-                                                    <div class="row">
-                                                        <div class="col-2 col-sm-2 col-md-2 col-lg-2">
-                                                            <a href="#"><i class="bi bi-whatsapp"></i></a>
-                                                        </div>
-                                                        <div class="col-2 col-sm-2 col-md-2 col-lg-2">
-                                                            <a href="#"><i class="bi bi-whatsapp"></i></a>
-                                                        </div>
-                                                        <div class="col-2 col-sm-2 col-md-2 col-lg-2">
-                                                            <a href="#"><i class="bi bi-whatsapp"></i></a>
-                                                        </div>
-                                                        <div class="col-2 col-sm-2 col-md-2 col-lg-2">
-                                                            <a href="#"><i class="bi bi-whatsapp"></i></a>
-                                                        </div>
-                                                        <div class="col-2 col-sm-2 col-md-2 col-lg-2">
-                                                            <a href="#"><i class="bi bi-whatsapp"></i></a>
-                                                        </div>
-                                                        <div class="col-2 col-sm-2 col-md-2 col-lg-2">
-                                                            <a href="#"><i class="bi bi-whatsapp"></i></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-1 col-sm-1 col-md-1 col-lg-1"></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-12 col-md-6 col-lg-6 bg-white">
-                                            <div class="mx-md-2 mx-sm-5 mx-lg-5 my-5">
-                                                <h2 class="fw-bolder profile-hello">Hello</h2>
-                                                <p class="fw-bold fs-5">Here's who I am & what I do</p>
-                                                <div class="text-uppercase profile-butons mb-3">
-                                                    <a class="btn btn-outline-dark fw-bold rounded-pill my-1" href="#"
-                                                        role="button">RESUME</a>
-                                                    <a class="btn btn-outline-dark fw-bold rounded-pill my-1" href="#"
-                                                        role="button">PROJECTS</a>
-                                                </div>
-                                                <p class="fs-6">I'm a paragraph. Click here to add your own
-                                                    text and
-                                                    edit me. It's
-                                                    easy. Just click “Edit Text” or double click me to add your own
-                                                    content and make changes to the font.</p>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-0 col-sm-0 col-md-0 col-lg-1"></div>
-                            </div>
-                        </div>
-                        <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-2"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> -->
-
-    <footer class="px-4 pt-5">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-0 col-sm-0 col-md-6 col-lg-6 mb-5 d-none d-lg-inline-block">
-                    <div class="row">
-                        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                            <i class="bi bi-c-square"></i>
-                            2024 by Arun Giri
-                        </div>
-                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 fw-bold">
-                            <a href="#" class="text-decoration-none">
-                                Download CV
-                                <i class="bi bi-download"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-sm-12 col-md-12 col-lg-6">
-                    <div class="row text-center">
-                        <div class="col-6 col-sm-6 col-md-3 col-lg-4 mb-5">
-                            <div class="row">
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 fw-bold">
-                                    Call
-                                </div>
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                                    <a href="tel:+919547676205" class="text-decoration-none text-dark">954-767-6205</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-3 col-lg-4 mb-5">
-                            <div class="row">
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 fw-bold">
-                                    Write
-                                </div>
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                                    <a href="mailto:giri.arun592@gmail.com"
-                                        class="text-decoration-none text-dark">giri.arun592@gmail.com</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-3 col-lg-4 mb-5">
-                            <div class="row">
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 fw-bold">
-                                    Follow
-                                </div>
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                                    <a href="#"><i class="bi bi-whatsapp mx-1 text-dark"></i></a>
-                                    <a href="#"><i class="bi bi-whatsapp mx-1 text-dark"></i></a>
-                                    <a href="#"><i class="bi bi-whatsapp mx-1 text-dark"></i></a>
-                                    <a href="#"><i class="bi bi-whatsapp mx-1 text-dark"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-3 col-lg-4 mb-5 d-lg-none d-inline-block">
-                            <div class="row">
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                                    <i class="bi bi-c-square"></i>
-                                    2024 by Arun Giri
-                                </div>
-                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 fw-bold">
-                                    <a href="#" class="text-decoration-none">
-                                        Download CV
-                                        <i class="bi bi-download"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-</body>
-
+            if( !in_array( $action, array( "login", "signup" ) ) ){
+                include $_config[ "absolute_path_admin" ] . '/include/footer.php';
+            }
+        ?>
+    
+    </body>
 </html>
 
-<?php include 'include/ajaxPopupModal.php';?>
-<?php include 'include/foot.php';?>
+<?php 
+    if( in_array( $action, array( "login","signup","addeditfamily" ) ) ){
+        include $_config[ "absolute_path_admin" ] . '/include/ajaxPopupModal.php';
+    }
+    
+    include $_config[ "absolute_path_admin" ] . '/include/foot.php';
+
+    
+    switch( $action ){
+        case "family":
+            include $_config[ "absolute_path_admin" ] . '/include/deletePopupModal.php';
+        default:
+            // Do Nothing
+    }
+
+?>
+
+

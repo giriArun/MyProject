@@ -14,5 +14,12 @@
 <!-- data table -->
 <script src="https://cdn.datatables.net/2.1.0/js/dataTables.min.js"></script>
 
+<?php
+    if( in_array( $action, array( "addeditfamily" ) ) ){
+        ?>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js"></script>
+        <?php
+    }
+?>
     
 <script src="<?=$_config[ "root_path" ];?>/asset/js/admin.js"></script>

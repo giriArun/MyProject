@@ -8,7 +8,13 @@
 <!-- dataTable -->
 <link rel="stylesheet" href="https://cdn.datatables.net/2.1.0/css/dataTables.dataTables.min.css" />
 
-
+<?php
+    if( in_array( $action, array( "addeditfamily" ) ) ){
+        ?>
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css" rel="stylesheet" />
+        <?php
+    }
+?>
 
 <!-- Custom css -->
 <link href="<?=$_config[ "root_path" ];?>/asset/css/admin.css" rel="stylesheet">

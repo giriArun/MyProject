@@ -128,7 +128,7 @@
 
         // redirect function
         public function redirectToHome( $rootPathAdmin ){
-            header( "Location: " . $rootPathAdmin . "/index.php" );
+            header( "Location: " . $rootPathAdmin . "/?action=dashboard" );
         }
     }
 ?>

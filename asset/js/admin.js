@@ -167,7 +167,7 @@ function validatedForm(
 function logout() {
     var formData = [{ name: 'actionType', value: 'logOutSubmit' }];
 
-    ajaxCall(formData = formData, redirectUrl = rootPathAdmin + "/login.php");
+    ajaxCall(formData = formData, redirectUrl = "login");
 }
 
 //profile
@@ -200,7 +200,7 @@ function ajaxCall(formData, redirectUrl = '') {
     $.ajax({
         type: "POST",
         async: false,
-        url: rootPath + "/model/ajaxService.php",
+        url: rootPathAdmin + "/ajax.php",
         data: formData,
         success: function (data) {
             data = JSON.parse(data);
@@ -219,7 +219,7 @@ function ajaxCall(formData, redirectUrl = '') {
                         }, 1000);
                     } else if (redirectUrl != '') {
                         setTimeout(function () {
-                            window.location.href = redirectUrl;
+                            window.location.href = rootPathAdmin + "/?action=" + redirectUrl;
                         }, 1000);
                     }
 
@@ -245,7 +245,7 @@ function ajaxCall(formData, redirectUrl = '') {
 
 //::::Page specific::::
 $(function () {
-    if (document.body.classList.contains('signup')) {
+    if (document.body.classList.contains('signup')) {   //  Signup page
 
         $("form[ name = 'form_signup' ]").submit(function (e) {
             e.preventDefault();
@@ -293,7 +293,7 @@ $(function () {
                 $('div.valid-feedback, div.invalid-feedback', '.' + this.password.id).addClass('d-none');
                 $('div.invalid-js-message', '.' + this.password.id).css('display', 'block').html('Please enter a Password between 8 to 16 characters.');
             } else {
-                ajaxCall(formData = formData, redirectUrl = "login.php");
+                ajaxCall(formData = formData, redirectUrl = "login");
             }
         });
 
@@ -304,7 +304,7 @@ $(function () {
             }
         });
 
-    } else if (document.body.classList.contains('login')) {
+    } else if (document.body.classList.contains('login')) { //  Login page
 
         $("form[ name = 'form_login' ]").submit(function (e) {
             e.preventDefault();
@@ -333,7 +333,7 @@ $(function () {
                     $('div.valid-feedback, div.invalid-feedback', '.' + this.emailPhone.id).addClass('d-none');
                     $('div.invalid-js-message', '.' + this.emailPhone.id).css('display', 'block').html('Please enter a Phone within 10 number.');
                 } else {
-                    ajaxCall(formData = formData, redirectUrl = "index.php");
+                    ajaxCall(formData = formData, redirectUrl = "dashboard");
                 }
             }
         });
@@ -345,7 +345,7 @@ $(function () {
             }
         });
 
-    } else if (document.body.classList.contains('profile')) {
+    } else if (document.body.classList.contains('profile')) {   // TODO: need to test
         $(".profileEditButton .editButton").click(function () {
             editProfile(true);
         });
@@ -421,7 +421,7 @@ $(function () {
                 img.src = objectUrl;
             }
         });
-    } else if (document.body.classList.contains('addEditProjectRole')) {    // Add Edit Project Role Type page
+    } else if (document.body.classList.contains('addEditProjectRole')) {   // TODO: need to test // Add Edit Project Role Type page
         $("form[ name = 'form_projectRoleType' ]").submit(function (e) {
             e.preventDefault();
             var returnMessage = "";
@@ -467,7 +467,7 @@ $(function () {
                 $('div.invalid-js-message', '.' + this.id).css('display', 'none');
             }
         });
-    } else if (document.body.classList.contains('addEditProject')) {    // Add Edit Project page
+    } else if (document.body.classList.contains('addEditProject')) {  // TODO: need to test  // Add Edit Project page
         $("form[ name = 'form_projects' ]").submit(function (e) {
             e.preventDefault();
             var returnMessage = "";
@@ -517,7 +517,7 @@ $(function () {
                 $('div.invalid-js-message', '.' + this.id).css('display', 'none');
             }
         });
-    } else if (document.body.classList.contains('addEditTechnicalSkill')) {    // Add Edit Technical Skill
+    } else if (document.body.classList.contains('addEditTechnicalSkill')) { // TODO: need to test   // Add Edit Technical Skill
         $("form[ name = 'form_addEditTechnicalSkill' ]").submit(function (e) {
             e.preventDefault();
             var returnMessage = "";
@@ -563,7 +563,7 @@ $(function () {
                 $('div.invalid-js-message', '.' + this.id).css('display', 'none');
             }
         });
-    } else if (document.body.classList.contains('addEditEducation')) {    // Add Edit Education
+    } else if (document.body.classList.contains('addEditEducation')) {  // TODO: need to test  // Add Edit Education
         $("form[ name = 'form_addEditEducation' ]").submit(function (e) {
             e.preventDefault();
             var returnMessage = "";
@@ -608,6 +608,60 @@ $(function () {
         });
 
         $('.addEditProject .form-control').on("keyup", function (e) {
+            if ($('div.valid-feedback, div.invalid-feedback', '.' + this.id).hasClass('d-none')) {
+                $('div.valid-feedback, div.invalid-feedback', '.' + this.id).removeClass('d-none');
+                $('div.invalid-js-message', '.' + this.id).css('display', 'none');
+            }
+        });
+    } else if (document.body.classList.contains('addeditfamily')) {    //  Family page
+        $("form[ name = 'form_addeditfamily' ]").submit(function (e) {
+            e.preventDefault();
+            var returnMessage = "";
+            var isAjaxCall = true;
+
+            $(this.elements).each(function (e) {
+                var minLength = $(this).attr('minlength');
+                var maxLength = $(this).attr('maxlength');
+                var dataType = $(this).data('type');
+                var dataName = $(this).data('name');
+                var dataValue = $(this).val();
+
+                if (typeof dataType != 'undefined' && ((dataValue).trim()).length > 0) {
+                    returnMessage = validatedForm(
+                        data = dataValue,
+                        dataType = dataType,
+                        dataName = dataName,
+                        minLength = minLength,
+                        maxLength = maxLength
+                    );
+
+                    if (returnMessage != "") {
+                        isAjaxCall = false;
+                        this.focus();
+                        $('div.valid-feedback, div.invalid-feedback', '.' + this.id).addClass('d-none');
+                        $('div.invalid-js-message', '.' + this.id).css('display', 'block').html(returnMessage);
+                    }
+                }
+            });
+
+            if (isAjaxCall) {
+                var formData = $(this).serializeArray();
+                formData.push({ name: 'actionType', value: 'addEditFamilySubmit' });
+
+                ajaxCall(formData = formData, redirectUrl = "family");
+            }
+
+        });
+
+        /* if ($("#validationRoot").prop('checked') == false) {
+            $("#validationParent").attr("disabled", true);
+        }
+
+        $('#validationRoot').click(function () {
+            $('#validationParent').attr('disabled', !$(this).is(':checked'));
+        }); */
+
+        $('.addeditfamily .form-control').on("keyup", function (e) {
             if ($('div.valid-feedback, div.invalid-feedback', '.' + this.id).hasClass('d-none')) {
                 $('div.valid-feedback, div.invalid-feedback', '.' + this.id).removeClass('d-none');
                 $('div.invalid-js-message', '.' + this.id).css('display', 'none');

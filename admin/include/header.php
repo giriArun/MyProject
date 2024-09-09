@@ -17,14 +17,14 @@
                     </li>
                     <?php
                         if( $_SESSION[ "isAdmin" ] == 1 ){
-                            $familyActive = in_array( $parentClass, array( "family" ) ) ? 'active' : '';
-                            $educationActive = in_array( $parentClass, array( "education", "addEditEducation" ) ) ? 'active' : '';
-                            $projectsActive = in_array( $parentClass, array( "projects", "addEditProjectRole", "addEditProject" ) ) ? 'active' : '';
-                            $skillsActive = in_array( $parentClass, array( "skills", "addEditTechnicalSkill", "" ) ) ? 'active' : '';
+                            $familyActive = in_array( $action, array( "family" ) ) ? 'active' : '';
+                            $educationActive = in_array( $action, array( "education", "addEditEducation" ) ) ? 'active' : '';
+                            $projectsActive = in_array( $action, array( "projects", "addEditProjectRole", "addEditProject" ) ) ? 'active' : '';
+                            $skillsActive = in_array( $action, array( "skills", "addEditTechnicalSkill", "" ) ) ? 'active' : '';
                             $aboutMeActive = ( $educationActive == '' && $projectsActive == '' && $skillsActive == '' ) ? '' : 'active';
                             ?>
                                 <li class="nav-item text-uppercase">
-                                    <a class="nav-link <?=$familyActive;?>" aria-current="page" href="<?=$_config[ "root_path_admin" ];?>/family/family.php">Family</a>
+                                    <a class="nav-link <?=$familyActive;?>" aria-current="page" href="<?=$_config[ "root_path_admin" ];?>/?action=family">Family</a>
                                 </li>
                                 <li class="nav-item dropdown text-uppercase">
                                     <a class="nav-link dropdown-toggle <?=$aboutMeActive;?>" href="#" id="aboutMeDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

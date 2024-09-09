@@ -6,7 +6,7 @@
             $sql = "
                 SELECT id,
                     name,
-                    nickname,
+                    nickName,
                     gender,
                     DOB,
                     DOD,
@@ -38,7 +38,7 @@
                         array( 
                             "familyId" => $queryResult[ "id" ],
                             "name" => $queryResult[ "name" ],
-                            "nickname" => $queryResult[ "nickname" ],
+                            "nickName" => $queryResult[ "nickName" ],
                             "gender" => $queryResult[ "gender" ],
                             "dob" => $queryResult[ "DOB" ],
                             "dod" => $queryResult[ "DOD" ],
@@ -53,98 +53,234 @@
 
             return $returnArray;
         }
-        /* public function insertEducation( 
-            $institutionName,
-            $degreeName,
-            $startDate,
-            $endDate,
-            $continueDegree,
-            $institutionAddress,
-            $degreeDetail
-        ){
+        
+        public function getParents( $familyId = 0 ){
             global $conn;
-            $createdBy = $_SESSION[ "userId" ];
-            $endDateFiled = "";
-            $endDateValue = "";
+            
+            $sql = "
+                SELECT id,
+                    name,
+                    nickName,
+                    gender
+                FROM family
+                WHERE id <> $familyId 
+                ORDER BY name
+            ";
 
-            if( !$continueDegree ){
-                $endDateFiled = "end_date,";
-                $endDateValue = "'$endDate',";
+            $result = mysqli_query( $conn, $sql );
+
+            $returnArray = array( 
+                "status" => false, 
+                "data" => []
+            );
+
+            if( mysqli_num_rows( $result ) > 0 ){
+                $returnArray[ "status" ] = true;
+                while( $queryResult = mysqli_fetch_assoc( $result ) ) {
+                    array_push(
+                        $returnArray[ "data" ], 
+                        array( 
+                            "parentId" => $queryResult[ "id" ],
+                            "name" => $queryResult[ "name" ],
+                            "nickName" => $queryResult[ "nickName" ],
+                            "gender" => $queryResult[ "gender" ]
+                        )
+                    );
+                }
             }
 
+            return $returnArray;
+        }
+        
+        public function getSpouses( $familyId = 0 ){
+            global $conn;
+            
             $sql = "
-                INSERT INTO educations (
-                    user_id_fk,
-                    institution_name,
-                    degree_name,
-                    start_date,
-                    $endDateFiled
-                    isContinue,
-                    institution_address,
-                    degree_detail,
-                    created_by
+                SELECT id,
+                    name,
+                    nickName,
+                    gender
+                FROM family
+                WHERE id NOT IN(
+                    SELECT spouse_id 
+                    FROM family 
+                    WHERE id <> $familyId
+                ) 
+                AND id <> $familyId 
+                ORDER BY name
+            ";
+
+            $result = mysqli_query( $conn, $sql );
+
+            $returnArray = array( 
+                "status" => false, 
+                "data" => []
+            );
+
+            if( mysqli_num_rows( $result ) > 0 ){
+                $returnArray[ "status" ] = true;
+                while( $queryResult = mysqli_fetch_assoc( $result ) ) {
+                    array_push(
+                        $returnArray[ "data" ], 
+                        array( 
+                            "spouseId" => $queryResult[ "id" ],
+                            "name" => $queryResult[ "name" ],
+                            "nickName" => $queryResult[ "nickName" ],
+                            "gender" => $queryResult[ "gender" ]
+                        )
+                    );
+                }
+            }
+
+            return $returnArray;
+        }
+
+        public function insertFamily( 
+            $name,
+            $gender,
+            $sequence,
+            $nickName,
+            $dob,
+            $dod,
+            $parentId,
+            $spouseId,
+            $isRoot
+        ){
+            global $conn;
+ 
+            $nickName = !empty($nickName) ? "'$nickName'" : "NULL";
+            $dob = !empty($dob) ? "'$dob'" : "NULL";
+            $dod = !empty($dod) ? "'$dod'" : "NULL";
+
+            $sql = "
+                INSERT INTO family (
+                    name, 
+                    nickName, 
+                    gender, 
+                    DOB, 
+                    DOD, 
+                    parent_id, 
+                    spouse_id, 
+                    isRoot, 
+                    sequence
                 ) VALUES (
-                    $createdBy,
-                    '$institutionName',
-                    '$degreeName',
-                    '$startDate',
-                    $endDateValue
-                    $continueDegree,
-                    '$institutionAddress',
-                    '$degreeDetail',
-                    $createdBy
+                    '$name', 
+                    $nickName, 
+                    '$gender', 
+                    $dob, 
+                    $dod, 
+                    $parentId, 
+                    $spouseId, 
+                    $isRoot, 
+                    $sequence
                 )
             ";
     
             if ( mysqli_query( $conn, $sql ) ) {
                 $last_id = mysqli_insert_id( $conn );
+                
+                $this->updateSpouse( $newId = $last_id, $spouseId = $spouseId );
+                $this->updateSequence( $parentId = $parentId, $sequence = $sequence, $lastId = $last_id );
             } else {
                 $last_id = 0;
             }
     
             return $last_id;
-        } 
+        }
 
-        public function updateEducation(
-            $educationId,
-            $institutionName,
-            $degreeName,
-            $startDate,
-            $endDate,
-            $continueDegree,
-            $institutionAddress,
-            $degreeDetail
+        public function updateFamily(
+            $familyId,
+            $name,
+            $gender,
+            $sequence,
+            $nickName,
+            $dob,
+            $dod,
+            $parentId,
+            $spouseId,
+            $isRoot
         ){
             global $conn;
-            $modifiedBy = $_SESSION[ "userId" ];
-            $endDateFiled = "";
-
-            if( !$continueDegree ){
-                $endDateFiled = "end_date = '$endDate',";
-            }
+ 
+            $nickName = !empty($nickName) ? "'$nickName'" : "NULL";
+            $dob = !empty($dob) ? "'$dob'" : "NULL";
+            $dod = !empty($dod) ? "'$dod'" : "NULL";
 
             $sql = "
-                UPDATE educations 
-                SET institution_name = '$institutionName',
-                    degree_name = '$degreeName',
-                    start_date = '$startDate',
-                    $endDateFiled
-                    isContinue = $continueDegree,
-                    institution_address = '$institutionAddress',
-                    degree_detail = '$degreeDetail',
-                    modified_on = now(),
-                    modified_by = $modifiedBy
-                WHERE education_id = $educationId
+                UPDATE family SET
+                name = '$name',
+                nickName = $nickName,
+                gender = '$gender',
+                DOB = $dob,
+                DOD = $dod,
+                parent_id = $parentId,
+                spouse_id = $spouseId,
+                isRoot = $isRoot,
+                sequence = $sequence,
+                modified_on = now()
+                WHERE id = $familyId
             ";
 
             if (mysqli_query($conn, $sql)) {
-                $last_id = $educationId;
+                $last_id = $familyId;
+                
+                $this->updateSpouse( $newId = $last_id, $spouseId = $spouseId );
+                $this->updateSequence( $parentId = $parentId, $sequence = $sequence, $lastId = $last_id );
             } else {
                 $last_id = 0;
             }
-    
+
             return $last_id;
         } 
+
+        private function updateSpouse( $newId, $spouseId ){
+            global $conn;
+            
+            if($spouseId > 0){
+                $update = "UPDATE family SET spouse_id = $newId WHERE id = $spouseId";
+            }else{
+                $update = "UPDATE family SET spouse_id = 0 WHERE spouse_id = $newId";
+            }
+
+            mysqli_query($conn, $update);
+        }
+
+        private function updateSequence( $parentId, $sequence, $lastId ){
+            global $conn;
+
+            $sql = "
+                SELECT id, sequence 
+                FROM family 
+                WHERE parent_id IN (
+                    SELECT id
+                    FROM family 
+                    WHERE id = $parentId
+                    UNION
+                    SELECT id
+                    FROM family 
+                    WHERE spouse_id = $parentId
+                )
+                AND sequence >= $sequence
+                and id <> $lastId
+                ORDER BY sequence ASC
+            ";
+
+            $result = mysqli_query( $conn, $sql );
+            $tempSequence = $sequence;
+
+            if( mysqli_num_rows( $result ) > 0 ){
+                while( $queryResult = mysqli_fetch_assoc( $result ) ) {
+                    $tempSequence++;
+                    $familyId = $queryResult[ "id" ];
+
+                    $updateSql = "UPDATE family SET sequence = $tempSequence WHERE id = $familyId";
+                    mysqli_query($conn, $updateSql);
+                }
+            }
+        }
+
+        /*  
+
 
         public function deleteEducation( $educationId ){
             global $conn;
