@@ -18,9 +18,10 @@
                     <?php
                         if( $_SESSION[ "isAdmin" ] == 1 ){
                             $familyActive = in_array( $action, array( "family" ) ) ? 'active' : '';
-                            $educationActive = in_array( $action, array( "education", "addEditEducation" ) ) ? 'active' : '';
-                            $projectsActive = in_array( $action, array( "projects", "addEditProjectRole", "addEditProject" ) ) ? 'active' : '';
-                            $skillsActive = in_array( $action, array( "skills", "addEditTechnicalSkill", "" ) ) ? 'active' : '';
+
+                            $educationActive = in_array( $action, array( "education", "addediteducation" ) ) ? 'active' : '';
+                            $projectsActive = in_array( $action, array( "projects", "addEditProjectRole", "addeditproject" ) ) ? 'active' : '';
+                            $skillsActive = in_array( $action, array( "skills", "addEditTechnicalSkill" ) ) ? 'active' : '';
                             $aboutMeActive = ( $educationActive == '' && $projectsActive == '' && $skillsActive == '' ) ? '' : 'active';
                             ?>
                                 <li class="nav-item text-uppercase">
@@ -31,8 +32,8 @@
                                         About Me
                                     </a>
                                     <ul class="dropdown-menu" aria-labelledby="aboutMeDropdown">
-                                        <li><a class="dropdown-item <?=$educationActive;?>" href="<?=$_config[ "root_path_admin" ];?>/education/education.php">Education</a></li>
-                                        <li><a class="dropdown-item <?=$projectsActive;?>" href="<?=$_config[ "root_path_admin" ];?>/projects.php">Projects</a></li>
+                                        <li><a class="dropdown-item <?=$educationActive;?>" href="<?=$_config[ "root_path_admin" ];?>/?action=education">Education</a></li>
+                                        <li><a class="dropdown-item <?=$projectsActive;?>" href="<?=$_config[ "root_path_admin" ];?>/?action=projects">Projects</a></li>
                                         <li><a class="dropdown-item <?=$skillsActive;?>" href="<?=$_config[ "root_path_admin" ];?>/skills.php">Skills</a></li>
                                         <li><a class="dropdown-item" href="#">Link 2</a></li>
                                         <li>

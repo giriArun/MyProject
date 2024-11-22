@@ -467,8 +467,8 @@ $(function () {
                 $('div.invalid-js-message', '.' + this.id).css('display', 'none');
             }
         });
-    } else if (document.body.classList.contains('addEditProject')) {  // TODO: need to test  // Add Edit Project page
-        $("form[ name = 'form_projects' ]").submit(function (e) {
+    } else if (document.body.classList.contains('addeditproject')) {  //    Project page
+        $("form[ name = 'form_addeditproject' ]").submit(function (e) {
             e.preventDefault();
             var returnMessage = "";
             var isAjaxCall = true;
@@ -500,9 +500,9 @@ $(function () {
 
             if (isAjaxCall) {
                 var formData = $(this).serializeArray();
-                formData.push({ name: 'actionType', value: 'addEditProject' });
+                formData.push({ name: 'actionType', value: 'addEditProjectSubmit' });
 
-                ajaxCall(formData = formData, redirectUrl = "projects.php");
+                ajaxCall(formData = formData, redirectUrl = "projects");
             }
 
         });
@@ -563,8 +563,8 @@ $(function () {
                 $('div.invalid-js-message', '.' + this.id).css('display', 'none');
             }
         });
-    } else if (document.body.classList.contains('addEditEducation')) {  // TODO: need to test  // Add Edit Education
-        $("form[ name = 'form_addEditEducation' ]").submit(function (e) {
+    } else if (document.body.classList.contains('addediteducation')) {  //  Education Page
+        $("form[ name = 'form_addediteducation' ]").submit(function (e) {
             e.preventDefault();
             var returnMessage = "";
             var isAjaxCall = true;
@@ -598,7 +598,7 @@ $(function () {
                 var formData = $(this).serializeArray();
                 formData.push({ name: 'actionType', value: 'addEditEducationSubmit' });
 
-                ajaxCall(formData = formData, redirectUrl = rootPathAdmin + "/education/education.php");
+                ajaxCall(formData = formData, redirectUrl = "education");
             }
 
         });
@@ -607,7 +607,7 @@ $(function () {
             $('#validationEndDate').attr('disabled', $(this).is(':checked'));
         });
 
-        $('.addEditProject .form-control').on("keyup", function (e) {
+        $('.addediteducation .form-control').on("keyup", function (e) {
             if ($('div.valid-feedback, div.invalid-feedback', '.' + this.id).hasClass('d-none')) {
                 $('div.valid-feedback, div.invalid-feedback', '.' + this.id).removeClass('d-none');
                 $('div.invalid-js-message', '.' + this.id).css('display', 'none');
@@ -653,14 +653,6 @@ $(function () {
 
         });
 
-        /* if ($("#validationRoot").prop('checked') == false) {
-            $("#validationParent").attr("disabled", true);
-        }
-
-        $('#validationRoot').click(function () {
-            $('#validationParent').attr('disabled', !$(this).is(':checked'));
-        }); */
-
         $('.addeditfamily .form-control').on("keyup", function (e) {
             if ($('div.valid-feedback, div.invalid-feedback', '.' + this.id).hasClass('d-none')) {
                 $('div.valid-feedback, div.invalid-feedback', '.' + this.id).removeClass('d-none');
@@ -669,13 +661,15 @@ $(function () {
         });
     }
 
-    // DataTable
-    $('#data_table').DataTable(
-        {
-            columnDefs: [{ orderable: false, targets: -1 }],
-            scrollX: true
-        }
-    );
+    if (isDataTable == 1) {
+        // DataTable:   TODO: it will be apply if record count morethen 25
+        $('table.data_table').DataTable(
+            {
+                columnDefs: [{ orderable: false, targets: -1 }],
+                scrollX: true
+            }
+        );
+    }
 });
 
 

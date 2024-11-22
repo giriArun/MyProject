@@ -30,8 +30,17 @@
                 case "addeditfamily":
                     include $_config[ "absolute_path_admin" ] . '/family/addEditFamily.php';
                     break;
-                case "resume":
-                    include $_config[ "absolute_path_admin" ] . '/myInfo/resume.php';
+                case "education":
+                    include $_config[ "absolute_path_admin" ] . '/education/education.php';
+                    break;
+                case "addediteducation":
+                    include $_config[ "absolute_path_admin" ] . '/education/addEditEducation.php';
+                    break;
+                case "projects":
+                    include $_config[ "absolute_path_admin" ] . '/project/projects.php';
+                    break;
+                case "addeditproject":
+                    include $_config[ "absolute_path_admin" ] . '/project/addEditProject.php';
                     break;
                 default:
                     include $_config[ "absolute_path_admin" ] . '/myInfo/aboutMe.php';
@@ -46,20 +55,19 @@
 </html>
 
 <?php 
-    if( in_array( $action, array( "login","signup","addeditfamily" ) ) ){
+    if( in_array( $action, array( "login","signup","addeditfamily","addediteducation","addeditproject" ) ) ){
         include $_config[ "absolute_path_admin" ] . '/include/ajaxPopupModal.php';
     }
     
     include $_config[ "absolute_path_admin" ] . '/include/foot.php';
 
-    
-    switch( $action ){
-        case "family":
-            include $_config[ "absolute_path_admin" ] . '/include/deletePopupModal.php';
-        default:
-            // Do Nothing
+    if( in_array( $action, array( "family","education","projects" ) ) ){
+        include $_config[ "absolute_path_admin" ] . '/include/deletePopupModal.php';
     }
-
+    
+    if( in_array( $action, array( "addeditproject" ) ) ){
+        include $_config[ "absolute_path" ] . '/squareImageCrop/imageCrop.php';
+    }
 ?>
 
 

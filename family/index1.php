@@ -69,6 +69,7 @@
         <META HTTP-EQUIV="Expires" CONTENT="-1">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <title>Family Tree</title>
+        
         <style>
             * {
                 margin: 0;
@@ -82,14 +83,14 @@
                 white-space: nowrap;
                 min-width: 800px;
                 min-height: 500px;
-                width: 7000px;
+                width: 5000px;
                 height: 600px;
                 border: 15px solid lightgray;
             }
 
             .tree ul {
-                padding-top: 20px;
-                position: relative;
+                /* padding-top: 20px;
+                position: relative; */
                 transition: all 0.5s;
                 -webkit-transition: all 0.5s;
                 -moz-transition: all 0.5s;
@@ -258,6 +259,7 @@
                 z-index: 10;
             }
         </style>
+        <link href="test.css" rel="stylesheet">
     </head>
 
     <body>
@@ -271,7 +273,7 @@
                 showFamilyTree($familyTree);
 
                 function showFamilyTree($tree){
-                    echo "<ul>";
+                    echo '<ul class="position-relative pt-4">';
                     foreach ($tree as $item) {
                         echo "<li>";
 
@@ -291,7 +293,7 @@
                                 $gender = 'male';
                             }
 
-                            $name = $name . '<span class="spacer"></span><span class="'.$gender.'">' . $sp['name'] . '</span>';
+                            $name = $name . '<br><span class="'.$gender.'" style="margin-top: 10px;">' . $sp['name'] . '</span>';
                         }
                         
                         echo "<div>";

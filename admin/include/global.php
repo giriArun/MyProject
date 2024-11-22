@@ -5,8 +5,10 @@
         session_start( );
     }
     
+    require_once $_config[ "absolute_path" ] . '/model/educationService.php';
     require_once $_config[ "absolute_path" ] . '/model/familyService.php';
     require_once $_config[ "absolute_path" ] . '/model/usersService.php';
+    require_once $_config[ "absolute_path" ] . '/model/projectService.php';
 
     $usersService = new usersService( );
 
@@ -61,6 +63,16 @@
             $familyService = new familyService( );
             $pageTitle = "Family";
 
+            if( isset( $_POST[ 'deleteId' ] ) && isset( $_POST[ 'deleteType' ] ) ){
+                $deleteType = trim( $_POST[ 'deleteType' ] );
+                $deleteName = $_POST[ 'deleteName' ];
+
+                if( $deleteType == "familyDelete" ){
+                    $familyService->deleteFamily( $_POST[ 'deleteId' ] );
+                    $_SESSION[ "successMessage" ] = "The <b>" . $deleteName . "</b> was deleted.";
+                }
+            }
+
             if( $action == "family" ){
                 $familyData = $familyService->getFamily( $familyId = 0 );
             } else if( $action == "addeditfamily" ){
@@ -77,14 +89,73 @@
                 }
             }
             break;
-        case "projects":
-            $pageTitle = "PROJECTS";
-            $projectsData = $frontEndServices->getProjects( $userId );
+        case 'education': case 'addediteducation':
+            if( $_SESSION[ "isAdmin" ] != 1 ){
+                $validateService->redirectToHome( $_config[ "root_path_admin" ] );
+            }
+
+            $educationService = new educationService( );
+            $pageTitle = "Education";
+            
+            if( isset( $_POST[ 'deleteId' ] ) && isset( $_POST[ 'deleteType' ] ) ){
+                $deleteType = trim( $_POST[ 'deleteType' ] );
+                $deleteName = $_POST[ 'deleteName' ];
+
+                if( $deleteType == "educationDelete" ){
+                    $educationService->deleteEducation( $_POST[ 'deleteId' ] );
+                    $_SESSION[ "successMessage" ] = "The <b>" . $deleteName . "</b> was deleted.";
+                }
+            }
+
+            if( $action == "education" ){
+                $educationData = $educationService->getEdication( $educationId = 0 );
+            } else if( $action == "addediteducation" ){
+                if( $id > 0 ){
+                    $pageTitle = "Edit " . $pageTitle;
+                    $educationData = $educationService->getEdication( $educationId = $id );
+                } else {
+                    $pageTitle = "Add " . $pageTitle;
+                    $educationData = [ ];
+                }
+            }
             break;
-        case "resume":
-            $pageTitle = "RESUME";
-            $educationsData = $frontEndServices->getEducations( $userId );
-            $technicalSkillsData = $frontEndServices->getTechnicalsSkill( $userId );
+        case 'projects': case 'addeditproject':
+            if( $_SESSION[ "isAdmin" ] != 1 ){
+                $validateService->redirectToHome( $_config[ "root_path_admin" ] );
+            }
+
+            $projectService = new projectService( );
+            $pageTitle = "Projects";
+            
+            if( isset( $_POST[ 'deleteId' ] ) && isset( $_POST[ 'deleteType' ] ) ){
+                $deleteType = trim( $_POST[ 'deleteType' ] );
+                $deleteName = $_POST[ 'deleteName' ];
+
+                if( $deleteType == "projectDelete" ){
+                    $projectService->deleteProject( $_POST[ 'deleteId' ] );
+                    $_SESSION[ "successMessage" ] = "The <b>" . $deleteName . "</b> was deleted.";
+                }
+            }
+
+            if( $action == "projects" ){
+                $projectsData = $projectService->getProjects( );
+                $projectRoleData = $projectService->getProjectRoleType( );
+            } else if( $action == "addeditproject" ){
+                $projectRoleData = $projectService->getProjectRoleType( );
+
+                if( $id > 0 ){
+                    $pageTitle = "Edit " . $pageTitle;
+                    $projectsData = $projectService->getProjects( $userId = 0, $projectId = $id );
+                } else {
+                    $pageTitle = "Add " . $pageTitle;
+                    $projectsData = [ ];
+                }
+            }
+            /*
+            
+                    //$projectService->deleteProjectRole( $_POST[ 'deleteId' ] );
+
+            */
             break;
         default:
             $pageTitle = "ABOUT ME";
@@ -106,9 +177,7 @@ case 'family.php': case 'addeditfamily.php':  // Family Page
     include( $_SERVER['DOCUMENT_ROOT'] . '/myproject/model/dbConnection.php' );
     
     require_once $_config[ "absolute_path" ] . '/model/addressService.php';
-    require_once $_config[ "absolute_path" ] . '/model/educationService.php';
     
-    require_once $_config[ "absolute_path" ] . '/model/projectService.php';
     require_once $_config[ "absolute_path" ] . '/model/skillService.php';
     
     require_once $_config[ "absolute_path" ] . '/model/validateService.php';
@@ -136,23 +205,6 @@ case 'family.php': case 'addeditfamily.php':  // Family Page
             $userData = $usersService->getUserByUserId( $userId = $_SESSION[ 'userId' ] );
             $addressData = $addressService->getAddressById( $userId = $_SESSION[ 'userId' ] );
             break;
-        case 'projects.php':
-            $projectService = new projectService( );
-
-            $pageTitle = 'Projects';
-            $parentClass = "projects";
-
-            if( isset( $_POST[ 'deleteId' ] ) && isset( $_POST[ 'deleteType' ] ) ){
-                $deleteType = trim( $_POST[ 'deleteType' ] );
-
-                if( $deleteType == "projectRoleType" ){
-                    $projectService->deleteProjectRole( $_POST[ 'deleteId' ] );
-                }
-            }
-
-            $projectsData = $projectService->getProjects( );
-            $projectRoleData = $projectService->getProjectRoleType( );
-            break;
         case 'addeditprojectrole.php':
             $projectService = new projectService( );
 
@@ -170,15 +222,6 @@ case 'family.php': case 'addeditfamily.php':  // Family Page
                     $projectRoleType = $projectRoleData[ "data" ][ 0 ][ "projectRoleType" ];
                 }
             }
-            break;
-        case 'addeditproject.php':
-            $projectService = new projectService( );
-
-            $pageTitle = 'Add Edit Project';
-            $parentClass = "addEditProject";
-          
-            $projectsData = $projectService->getProjects( $userId = 0, $projectId = $id, $isProjectId = 1 );
-            $projectRoleData = $projectService->getProjectRoleType( );
             break;
         case 'skills.php':
             $skillService = new skillService( );
@@ -206,38 +249,6 @@ case 'family.php': case 'addeditfamily.php':  // Family Page
             
             if( $id > 0 ){
                 $technicalSkillData = $skillService->getTechnicalSkill( $skillId = $id );
-            }
-            break;
-        case 'education.php': case 'addediteducation.php':  // Education Page
-            if( $_SESSION[ "isAdmin" ] != 1 ){
-                $validateService->redirectToHome( $_config[ "root_path_admin" ] );
-            }
-
-            $educationService = new educationService( );
-            $pageTitle = "Education";
-            
-            if( isset( $_POST[ 'deleteId' ] ) && isset( $_POST[ 'deleteType' ] ) ){
-                $deleteType = trim( $_POST[ 'deleteType' ] );
-
-                if( $deleteType == "education" ){
-                    $educationService->deleteEducation( $_POST[ 'deleteId' ] );
-                }
-            }
-
-            if( $fileName == "education.php" ){
-                $parentClass = "education";
-                $educationData = $educationService->getEdication( $educationId = 0 );
-
-            } else if( $fileName == "addediteducation.php" ){
-                $parentClass = "addEditEducation";
-                
-                if( $id > 0 ){
-                    $pageTitle = "Edit " . $pageTitle;
-                    $educationData = $educationService->getEdication( $educationId = $id );
-                } else {
-                    $pageTitle = "Add " . $pageTitle;
-                    $educationData = [ ];
-                }
             }
             break;
         default:

@@ -5,12 +5,30 @@
             <div class="col-10 my-5">
                 <div class="fs-2 text-center mb-5 mt-3 text-primary"><?=$pageTitle;?></div>
                 <div class="row">
+                    <div class="col-12 messageBox">
+                        <div class="row">
+                            <div class="col-0 col-sm-1"></div>
+                            <div class="col-12 col-sm-10">
+                                <?php
+                                    if( isset( $_SESSION[ 'successMessage' ] ) ){
+                                        ?>
+                                            <div class="alert alert-success" role="alert">
+                                                <?=$_SESSION[ 'successMessage' ];?>
+                                            </div>
+                                        <?php
+                                        unset( $_SESSION[ 'successMessage' ] );
+                                    }
+                                ?>
+                            </div>
+                            <div class="col-0 col-sm-1"></div>
+                        </div>
+                    </div>
                     <div class="col-0 col-sm-1 col-md-1 col-lg-1"></div>
                     <div class="col-12 col-sm-10 col-md-10 col-lg-10 bg-white shadow py-5 px-5">
                         <div class="row">
                             <div class="col-12">
-                                <table class="table" id="data_table">
-                                    <thead>
+                                <table class="table cell-border hover order-column stripe w-100 data_table">
+                                    <thead class="table-secondary">
                                         <tr>
                                             <th scope="col">Name</th>
                                             <th scope="col">Gender</th>
@@ -42,7 +60,7 @@
                                                                     data-bs-target="#deleteConfirmation" 
                                                                     data-bs-id="<?=$family[ "familyId" ];?>" 
                                                                     data-bs-name="<?=$family[ "name" ];?>" 
-                                                                    data-bs-type="family">
+                                                                    data-bs-type="familyDelete">
                                                                     <i class="bi bi-trash"></i>
                                                                 </button>
                                                             </td>

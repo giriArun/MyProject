@@ -279,26 +279,22 @@
             }
         }
 
-        /*  
-
-
-        public function deleteEducation( $educationId ){
+        public function deleteFamily( $id ){
             global $conn;
 
             $sql = "
                 DELETE 
-                FROM educations 
-                WHERE education_id = $educationId
+                FROM family 
+                WHERE id = $id
             ";
-
+            
             if (mysqli_query($conn, $sql)) {
-                $last_id = $educationId;
+                $last_id = $id;
             } else {
                 $last_id = 0;
             }
     
             return $last_id;
-        } 
- */
+        }
     }
 ?>

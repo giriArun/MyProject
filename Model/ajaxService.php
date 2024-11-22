@@ -450,7 +450,7 @@
         }
     }
     
-    function projectSubmit( $postData ){
+    function addEditProjectSubmit( $postData ){
         $projectId = $postData['projectId'];
         $projectName = $postData['projectName'];
         $roleTypeId = $postData['roleTypeId'];
@@ -826,8 +826,8 @@
             case "projectRoleTypeSubmit":
                 print json_encode( projectRoleTypeSubmit( $_POST ) );
                 break;
-            case "addEditProject":
-                print json_encode( projectSubmit( $_POST ) );
+            case "addEditProjectSubmit":
+                print json_encode( addEditProjectSubmit( $_POST ) );
                 break;
             case "technicalSkillSubmit":
                 print json_encode( technicalSkillSubmit( $_POST ) );

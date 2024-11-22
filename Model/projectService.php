@@ -215,8 +215,7 @@
 
         public function getProjects( 
             $userId = 0, 
-            $projectId = 0,
-            $isProjectId = 0
+            $projectId = 0
         ){
             global $conn;
 
@@ -241,7 +240,7 @@
                 WHERE p.user_id_fk = $userId
             ";
 
-            if( $projectId > 0 || $isProjectId == 1 ){
+            if( $projectId > 0 ){
                 $sql .= "
                     AND p.project_id = $projectId
                 ";
@@ -280,5 +279,23 @@
 
             return $returnArray;
         }
+
+        public function deleteProject( $projectId ){
+            global $conn;
+
+            $sql = "
+                DELETE 
+                FROM projects 
+                WHERE project_id = $projectId
+            ";
+
+            if (mysqli_query($conn, $sql)) {
+                $last_id = $projectId;
+            } else {
+                $last_id = 0;
+            }
+    
+            return $last_id;
+        } 
     }
 ?>
