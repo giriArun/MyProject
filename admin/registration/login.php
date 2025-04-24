@@ -7,6 +7,7 @@
                     <div class="col-1 col-sm-2 col-md-3 col-lg-3"></div>
                     <div class="col-10 col-sm-8 col-md-6 col-lg-6 bg-white shadow py-5 px-5">
                         <h1 class="text-primary text-center">LogIn</h1>
+                        <div>arungiri@gmail.com - Test@12345</div>
                         <form class="row g-3 needs-validation" novalidate action="" method="post" name="form_login">
                             <div class="col-md-12 validationEmailPhone">
                                 <label for="validationEmailPhone" class="form-label fw-bold">Email / Phone</label>
